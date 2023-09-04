@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/photo_carousel_widget.dart';
 
 class HotelWidget extends StatefulWidget {
@@ -25,7 +26,8 @@ class _HotelWidgetState extends State<HotelWidget> {
       ),
       body: Column(
         children: [
-          PhotoCarousel(),
+          PhotoCarouselWidget(),
+          AboutHotelWidget(),
         ],
       ),
     );

@@ -1,18 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_app/configuration/configuration.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
 
-class PhotoCarousel extends StatefulWidget {
-  const PhotoCarousel({super.key});
+class PhotoCarouselWidget extends StatefulWidget {
+  const PhotoCarouselWidget({super.key});
 
   @override
-  State<PhotoCarousel> createState() => _PhotoCarouselState();
+  State<PhotoCarouselWidget> createState() => _PhotoCarouselWidgetState();
 }
 
-class _PhotoCarouselState extends State<PhotoCarousel> {
+class _PhotoCarouselWidgetState extends State<PhotoCarouselWidget> {
   int _currentPhoto = 0;
 
   @override
@@ -114,12 +113,13 @@ class _PhotoCarouselState extends State<PhotoCarousel> {
               Text(
                 'от 000 000 ₽',
                 style: TextStyle(
+                  textBaseline: TextBaseline.ideographic,
                   color: Colors.black,
                   fontSize: 30,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(width: 8.0,),
+              SizedBox(width: 8.0),
               Text(
                 'за тур с перелётом',
                 style: TextStyle(
