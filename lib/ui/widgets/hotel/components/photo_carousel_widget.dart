@@ -75,22 +75,15 @@ class _PhotoCarouselWidgetState extends State<PhotoCarouselWidget> {
           const SizedBox(height: 10.0),
           const Row(
             children: [
-              Icon(
-                Icons.star,
-                color: AppColors.orangeText,
-              ),
+              Icon(Icons.star, color: AppColors.orangeText),
               Text(
                 'rating',
-                style: TextStyle(
-                  color: AppColors.orangeText,
-                ),
+                style: TextStyle(color: AppColors.orangeText),
               ),
               SizedBox(width: 5.0),
               Text(
                 'rating_name',
-                style: TextStyle(
-                  color: AppColors.orangeText,
-                ),
+                style: TextStyle(color: AppColors.orangeText),
               ),
             ],
           ),

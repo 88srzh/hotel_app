@@ -25,6 +25,7 @@ class _HotelWidgetState extends State<HotelWidget> {
         centerTitle: true,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           PhotoCarouselWidget(),
           AboutHotelWidget(),
