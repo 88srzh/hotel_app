@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/resources/app_colors.dart';
+import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/widgets/hotel/components/custom_divider.dart';
+import 'package:hotel_app/ui/widgets/hotel/components/custom_listtile.dart';
 
 class AboutHotelWidget extends StatelessWidget {
   const AboutHotelWidget({super.key});
@@ -33,16 +36,11 @@ class AboutHotelWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10.0),
-          ListTile(
-            title: Text(
-              'Удобства',
-              style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            subtitle: Text(
-              'Самое необходимое',
-              style: TextStyle(color: AppColors.greyText, fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
+          CustomListTile(leadingImage: AppImages.emojiHappy, firstText: 'Удобства'),
+          CustomDivider(),
+          CustomListTile(leadingImage: AppImages.tickSquare, firstText: 'Что включено'),
+          CustomDivider(),
+          CustomListTile(leadingImage: AppImages.closeSquare, firstText: 'Что не включено'),
         ],
       ),
     );
