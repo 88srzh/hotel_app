@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/photo_carousel_widget.dart';
+import 'package:hotel_app/ui/widgets/hotel/components/selection_button_widget.dart';
 
 class HotelWidget extends StatefulWidget {
   const HotelWidget({super.key});
@@ -29,6 +30,7 @@ class _HotelWidgetState extends State<HotelWidget> {
         children: [
           PhotoCarouselWidget(),
           AboutHotelWidget(),
+          SelectionButtonWidget(),
         ],
       ),
     );
