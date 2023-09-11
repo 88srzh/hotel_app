@@ -25,15 +25,18 @@ class _HotelWidgetState extends State<HotelWidget> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
-          PhotoCarouselWidget(),
-          AboutHotelWidget(),
-          SelectionButtonWidget(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PhotoCarouselWidget(),
+              AboutHotelWidget(),
+              SelectionButtonWidget(),
+            ],
+          ),
         ],
       ),
     );
   }
 }
-

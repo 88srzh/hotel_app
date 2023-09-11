@@ -43,4 +43,9 @@ class HotelCubit extends Cubit<HotelCubitState> {
   void showedHotel(int index) {
     hotelBloc.add(const HotelEvent.loadPage());
   }
+
+  void setupHotel() {
+    hotelBloc.add(const HotelEventReset());
+    hotelBloc.add(const HotelEventLoadPage());
+  }
 }
