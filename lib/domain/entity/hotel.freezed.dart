@@ -28,7 +28,7 @@ mixin _$Hotel {
   int get rating => throw _privateConstructorUsedError;
   String get ratingName => throw _privateConstructorUsedError;
   List<String> get imageUrls => throw _privateConstructorUsedError;
-  String get aboutTheHotel => throw _privateConstructorUsedError;
+  AboutTheHotel get aboutTheHotel => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +49,7 @@ abstract class $HotelCopyWith<$Res> {
       int rating,
       String ratingName,
       List<String> imageUrls,
-      String aboutTheHotel});
+      AboutTheHotel aboutTheHotel});
 }
 
 /// @nodoc
@@ -111,7 +111,7 @@ class _$HotelCopyWithImpl<$Res, $Val extends Hotel>
       aboutTheHotel: null == aboutTheHotel
           ? _value.aboutTheHotel
           : aboutTheHotel // ignore: cast_nullable_to_non_nullable
-              as String,
+              as AboutTheHotel,
     ) as $Val);
   }
 }
@@ -131,7 +131,7 @@ abstract class _$$_HotelCopyWith<$Res> implements $HotelCopyWith<$Res> {
       int rating,
       String ratingName,
       List<String> imageUrls,
-      String aboutTheHotel});
+      AboutTheHotel aboutTheHotel});
 }
 
 /// @nodoc
@@ -189,7 +189,7 @@ class __$$_HotelCopyWithImpl<$Res> extends _$HotelCopyWithImpl<$Res, _$_Hotel>
       aboutTheHotel: null == aboutTheHotel
           ? _value.aboutTheHotel
           : aboutTheHotel // ignore: cast_nullable_to_non_nullable
-              as String,
+              as AboutTheHotel,
     ));
   }
 }
@@ -236,7 +236,7 @@ class _$_Hotel implements _Hotel {
   }
 
   @override
-  final String aboutTheHotel;
+  final AboutTheHotel aboutTheHotel;
 
   @override
   String toString() {
@@ -302,7 +302,7 @@ abstract class _Hotel implements Hotel {
       required final int rating,
       required final String ratingName,
       required final List<String> imageUrls,
-      required final String aboutTheHotel}) = _$_Hotel;
+      required final AboutTheHotel aboutTheHotel}) = _$_Hotel;
 
   factory _Hotel.fromJson(Map<String, dynamic> json) = _$_Hotel.fromJson;
 
@@ -323,7 +323,7 @@ abstract class _Hotel implements Hotel {
   @override
   List<String> get imageUrls;
   @override
-  String get aboutTheHotel;
+  AboutTheHotel get aboutTheHotel;
   @override
   @JsonKey(ignore: true)
   _$$_HotelCopyWith<_$_Hotel> get copyWith =>

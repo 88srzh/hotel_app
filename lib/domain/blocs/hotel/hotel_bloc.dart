@@ -6,7 +6,7 @@ import 'package:hotel_app/configuration/configuration.dart';
 import 'package:hotel_app/domain/api_client/hotel_api_client.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/domain/entity/hotel_response.dart';
-import 'package:hotel_app/ui/components/hotel_container.dart';
+import 'package:hotel_app/ui/widgets/hotel/components/hotel_container.dart';
 
 part 'hotel_bloc.freezed.dart';
 
