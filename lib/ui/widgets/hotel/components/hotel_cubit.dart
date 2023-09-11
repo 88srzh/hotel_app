@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel_app/domain/blocs/hotel/hotel_bloc.dart';
+import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/hotel_cubit_state.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/hotel_data.dart';
@@ -21,6 +22,8 @@ class HotelCubit extends Cubit<HotelCubitState> {
 
   void _onState(HotelState state) {
     final hotels = state.hotels.map(_makeListData).toList();
+    final newState = this.state.copyWith(hotels: hotels);
+    emit(newState);
   }
 
   HotelData _makeListData(Hotel hotel) {
@@ -33,7 +36,11 @@ class HotelCubit extends Cubit<HotelCubitState> {
       rating: hotel.rating,
       ratingName: hotel.ratingName,
       imageUrls: hotel.imageUrls,
-      aboutTheHotel: AboutTheHotel(description: hotel.aboutTheHotel.desc),
+      aboutTheHotel: AboutTheHotel(description: hotel.aboutTheHotel.description, peculiarities: hotel.aboutTheHotel.peculiarities),
     );
+  }
+
+  void showedHotel(int index) {
+    hotelBloc.add(const HotelEvent.loadPage());
   }
 }

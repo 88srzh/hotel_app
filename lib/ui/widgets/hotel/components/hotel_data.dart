@@ -1,3 +1,5 @@
+import 'package:hotel_app/domain/entity/about_the_hotel.dart';
+
 class HotelData {
   final int id;
   final String name;
@@ -19,15 +21,5 @@ class HotelData {
     required this.ratingName,
     required this.imageUrls,
     required this.aboutTheHotel,
-  });
-}
-
-class AboutTheHotel {
-  final String description;
-  final String peculiarities;
-
-  const AboutTheHotel({
-    required this.description,
-    required this.peculiarities,
   });
 }

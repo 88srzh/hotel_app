@@ -50,6 +50,8 @@ abstract class $HotelCopyWith<$Res> {
       String ratingName,
       List<String> imageUrls,
       AboutTheHotel aboutTheHotel});
+
+  $AboutTheHotelCopyWith<$Res> get aboutTheHotel;
 }
 
 /// @nodoc
@@ -114,6 +116,14 @@ class _$HotelCopyWithImpl<$Res, $Val extends Hotel>
               as AboutTheHotel,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AboutTheHotelCopyWith<$Res> get aboutTheHotel {
+    return $AboutTheHotelCopyWith<$Res>(_value.aboutTheHotel, (value) {
+      return _then(_value.copyWith(aboutTheHotel: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -132,6 +142,9 @@ abstract class _$$_HotelCopyWith<$Res> implements $HotelCopyWith<$Res> {
       String ratingName,
       List<String> imageUrls,
       AboutTheHotel aboutTheHotel});
+
+  @override
+  $AboutTheHotelCopyWith<$Res> get aboutTheHotel;
 }
 
 /// @nodoc
@@ -195,8 +208,7 @@ class __$$_HotelCopyWithImpl<$Res> extends _$HotelCopyWithImpl<$Res, _$_Hotel>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
+@JsonSerializable()
 class _$_Hotel implements _Hotel {
   _$_Hotel(
       {required this.id,
