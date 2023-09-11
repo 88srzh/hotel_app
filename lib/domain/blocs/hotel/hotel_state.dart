@@ -8,7 +8,7 @@ class HotelState extends Equatable {
   @override
   List<Object> get props => [hotelContainer];
 
-  const HotelState.initial() : hotelContainer = const HotelContainer.inital();
+  const HotelState.initial() : hotelContainer = const HotelContainer.initial();
 
   const HotelState({
     required this.hotelContainer,
