@@ -1,4 +1,5 @@
 import 'package:hotel_app/domain/entity/hotel.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'hotel_response.g.dart';
 
@@ -12,5 +13,5 @@ class HotelResponse {
 
   factory HotelResponse.fromJson(Map<String, dynamic> json) => _$HotelResponseFromJson(json);
 
-  Map<String, dynamic> toJson => _$HotelResponseToJson(this);
+  Map<String, dynamic> toJson() => _$HotelResponseToJson(this);
 }
