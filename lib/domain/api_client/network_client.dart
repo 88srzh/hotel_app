@@ -50,46 +50,6 @@ class NetworkClient {
             print('Invalid username and/or password: You did not provide a valid login.');
           }
           throw ApiClientException(ApiClientExceptionType.auth);
-        case 3:
-          if (kDebugMode) {
-            print('Authentication failed: You do not have permissions to access the service.');
-          }
-          throw ApiClientException(ApiClientExceptionType.sessionExpired);
-        case 7:
-          if (kDebugMode) {
-            print('Invalid API key: You must be granted a valid key.');
-          }
-          break;
-        case 10:
-          if (kDebugMode) {
-            print('Suspended APU key: Access to  your account has been suspended, contact TMDB.');
-          }
-          break;
-        case 14:
-          if (kDebugMode) {
-            print('Authentication failed.');
-          }
-          break;
-        case 32:
-          if (kDebugMode) {
-            print('Email not verified: Your email address has not been verified.');
-          }
-          break;
-        case 33:
-          if (kDebugMode) {
-            print('Invalid request token: The request token is either expired or invalid.');
-          }
-          break;
-        case 35:
-          if (kDebugMode) {
-            print('Invalid token.');
-          }
-          break;
-        case 36:
-          if (kDebugMode) {
-            print('This token hasnt been granted write permission by the user.');
-            break;
-          }
       }
       throw ApiClientException(ApiClientExceptionType.other);
     }

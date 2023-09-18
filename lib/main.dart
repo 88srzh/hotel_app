@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotel_app/domain/blocs/hotel/hotel_bloc.dart';
+import 'package:hotel_app/ui/widgets/hotel/components/hotel_cubit.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,14 +16,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: ' .SF Pro Display',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => HotelCubit(
+            hotelBloc: HotelBloc(
+              const HotelState.initial(),
+            ),
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          fontFamily: ' .SF Pro Display',
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const HotelWidget(),
       ),
-      home: const HotelWidget(),
     );
   }
 }

@@ -26,7 +26,7 @@ class _HotelWidgetState extends State<HotelWidget> {
         centerTitle: true,
       ),
       body: ListView(
-        children: [
+        children: const [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
