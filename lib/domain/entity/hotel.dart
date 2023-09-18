@@ -1,24 +1,33 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hotel_app/domain/entity/about_the_hotel.dart';
-import 'package:hotel_app/ui/widgets/hotel/components/hotel_data.dart';
 
-part 'hotel.freezed.dart';
+part 'hotel.g.dart';
 
-@freezed
 @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
-class Hotel with _$Hotel {
-  factory Hotel({
-    required int id,
-    required String name,
-    required String adress,
-    required int minimalPrice,
-    required String priceForIt,
-    required int rating,
-    required String ratingName,
-    required List<String> imageUrls,
-    required AboutTheHotel aboutTheHotel,
-  }) = _Hotel;
+class Hotel {
+  final int id;
+  final String name;
+  final String adress;
+  final int minimalPrice;
+  final String priceForIt;
+  final int rating;
+  final String ratingName;
+  final List<String> imageUrls;
+  final AboutTheHotel aboutTheHotel;
+
+  const Hotel({
+    required this.id,
+    required this.name,
+    required this.adress,
+    required this.minimalPrice,
+    required this.priceForIt,
+    required this.rating,
+    required this.ratingName,
+    required this.imageUrls,
+    required this.aboutTheHotel,
+  });
 
   factory Hotel.fromJson(Map<String, dynamic> json) => _$HotelFromJson(json);
-}
 
+  Map<String, dynamic> toJson() => _$HotelToJson(this);
+}

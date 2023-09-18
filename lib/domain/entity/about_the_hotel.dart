@@ -1,14 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'about_the_hotel.freezed.dart';
+part 'about_the_hotel.g.dart';
 
-@freezed
 @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
-class AboutTheHotel with _$AboutTheHotel {
-  factory AboutTheHotel({
-    required String description,
-    required String peculiarities,
-  }) = _AboutTheHotel;
+class AboutTheHotel {
+  final String description;
+  final String peculiarities;
+
+  AboutTheHotel({required this.description, required this.peculiarities});
 
   factory AboutTheHotel.fromJson(Map<String, dynamic> json) => _$AboutTheHotelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AboutTheHotelToJson(this);
 }
