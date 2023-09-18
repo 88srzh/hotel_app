@@ -17,11 +17,10 @@ class NetworkClient {
     }
   }
 
-  Future<T> get<T>(
-    String path,
-    T Function(dynamic json) parser, [
-    Map<String, dynamic>? parameters,
-  ]) async {
+  Future<T> get<T>(String path,
+      T Function(dynamic json) parser, [
+        Map<String, dynamic>? parameters,
+      ]) async {
     final url = _makeUri(path, parameters);
     final request = await _client.getUrl(url);
     final response = await request.close();
@@ -56,15 +55,20 @@ class NetworkClient {
   }
 }
 
-extension HttpClientResponseJsonDecode on HttpClientResponse {
+  extension HttpClientResponseJsonDecode
+
+  on HttpClientResponse
+
+  {
+
   Future<dynamic> jsonDecode() async {
     return transform(utf8.decoder)
         .toList()
-        .then((value) => value.join())
-        // .then((value) {
-        //   final result = value.join();
-        //   return result;
-        // })
+        // .then((value) => value.join())
+    .then((value) {
+      final result = value.join();
+      return result;
+    })
         .then<dynamic>((v) => json.decode(v));
   }
 }
