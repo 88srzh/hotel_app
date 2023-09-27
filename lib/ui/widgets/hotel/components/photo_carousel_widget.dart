@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
-import 'package:hotel_app/ui/widgets/hotel/components/hotel_cubit.dart';
 
 class PhotoCarouselWidget extends StatefulWidget {
-  const PhotoCarouselWidget({super.key});
+  const PhotoCarouselWidget({super.key, required this.hotels});
+
+  final List<Hotel> hotels;
 
   @override
   State<PhotoCarouselWidget> createState() => _PhotoCarouselWidgetState();
@@ -23,18 +24,13 @@ class _PhotoCarouselWidgetState extends State<PhotoCarouselWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = context.watch<HotelCubit>();
     return SizedBox(
       height: 530.0,
       width: 375.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index) {
-          cubit.showedHotel(index);
-          final hotel = cubit.state.hotels[index];
-          final rating = hotel.rating;
-          final name = hotel.name;
+        itemCount: widget.hotels.length,
+        itemBuilder: (context, int index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
@@ -96,7 +92,7 @@ class _PhotoCarouselWidgetState extends State<PhotoCarouselWidget> {
                   children: [
                     const Icon(Icons.star, color: AppColors.orangeText),
                     Text(
-                      rating.toString(),
+                      widget.hotels[index].rating.toString(),
                       style: const TextStyle(color: AppColors.orangeText),
                     ),
                     const SizedBox(width: 5.0),

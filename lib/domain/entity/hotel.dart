@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 
 @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
 class Hotel {
@@ -10,8 +9,8 @@ class Hotel {
   final String priceForIt;
   final int rating;
   final String ratingName;
-  final List<String> imageUrls;
-  final AboutTheHotel aboutTheHotel;
+  // final List<String> imageUrls;
+  // final AboutTheHotel aboutTheHotel;
 
   const Hotel({
     required this.id,
@@ -21,8 +20,8 @@ class Hotel {
     required this.priceForIt,
     required this.rating,
     required this.ratingName,
-    required this.imageUrls,
-    required this.aboutTheHotel,
+    // required this.imageUrls,
+    // required this.aboutTheHotel,
   });
 
   factory Hotel.fromJson(Map<String, dynamic> json) {
@@ -34,8 +33,8 @@ class Hotel {
       priceForIt: json['priceForIt'] as String,
       rating: json['rating'] as int,
       ratingName: json['ratingName'] as String,
-      imageUrls: json['imageUrls'] as List<String>,
-      aboutTheHotel: json['aboutTheHotel'] as AboutTheHotel,
+      // imageUrls: json['imageUrls'] as List<String>,
+      // aboutTheHotel: json['aboutTheHotel'] as AboutTheHotel,
     );
   }
 }

@@ -1,3 +1,4 @@
+/*
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 
@@ -12,4 +13,4 @@ class HotelResponse {
   factory HotelResponse.fromJson(Map<String, dynamic> json) => _$HotelResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$HotelResponseToJson(this);
-}
+}*/

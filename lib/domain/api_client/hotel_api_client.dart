@@ -1,3 +1,4 @@
+/*
 import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/hotel_response.dart';
 
@@ -23,3 +24,4 @@ class HotelApiClient {
     return result;
   }
 }
+*/

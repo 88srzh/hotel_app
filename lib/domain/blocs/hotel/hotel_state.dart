@@ -1,3 +1,4 @@
+/*
 part of 'hotel_bloc.dart';
 
 class HotelState extends Equatable {
@@ -21,4 +22,4 @@ class HotelState extends Equatable {
       hotelContainer: hotelContainer ?? this.hotelContainer,
     );
   }
-}
+}*/
