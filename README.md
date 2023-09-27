@@ -1,2 +1,2 @@
 # hotel_app
-Hotel booking app
+Hotel booking app.
