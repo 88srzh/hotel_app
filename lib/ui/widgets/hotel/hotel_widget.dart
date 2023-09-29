@@ -51,6 +51,8 @@ class _HotelWidgetState extends State<HotelWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final String startHotelMinimalPrice = hotel.minimalPrice.toStringAsFixed(4).substring(0, 3);
+    final String endHotelMinimalPrice = hotel.minimalPrice.toStringAsFixed(4).substring(3, 6);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -68,19 +70,23 @@ class _HotelWidgetState extends State<HotelWidget> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 530.0,
-                width: 375.0,
+              Container(
+                height: 429.0,
+                // width: 375.0,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    // mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Stack(
                         children: [
                           Container(
                             height: 257,
-                            width: 343,
+                            // width: 343,
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -91,14 +97,18 @@ class _HotelWidgetState extends State<HotelWidget> {
                                   _currentPhoto = value;
                                 });
                               },
-                              // TODO change item count
                               itemCount: hotel.imageUrls.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final image = hotel.imageUrls[index];
                                 return Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                                  ),
                                   padding: const EdgeInsets.only(right: 10),
                                   child: CachedNetworkImage(
                                     imageUrl: image,
+                                    fit: BoxFit.fill,
+                                    alignment: Alignment.center,
                                     placeholder: (context, url) => const LoadingIndicatorWidget(),
                                     errorWidget: (context, url, dynamic error) => Image.asset(AppImages.noImage),
                                   ),
@@ -126,54 +136,73 @@ class _HotelWidgetState extends State<HotelWidget> {
                         ],
                       ),
                       const SizedBox(height: 10.0),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.star, color: AppColors.orangeText),
-                          Text(
-                            // widget.hotels[index].rating.toString(),
-                            hotel.rating.toString(),
-                            style: const TextStyle(color: AppColors.orangeText),
+                          Container(
+                            height: 29.0,
+                            width: 153.0,
+                            decoration: const BoxDecoration(
+                              color: AppColors.orangeBackground,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.star, color: AppColors.orangeText, size: 15),
+                                  Text(
+                                    hotel.rating.toString(),
+                                    style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(width: 5.0),
+                                  Text(
+                                    hotel.ratingName,
+                                    style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          const SizedBox(width: 5.0),
-                          Text(
-                            hotel.ratingName,
-                            style: const TextStyle(color: AppColors.orangeText),
-                          ),
-                        ],
-                      ),
-                      const Text(
-                        'Steigenberger Makadi',
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Text(
-                        hotel.adress,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColors.blueText,
-                        ),
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'от 000 000 ₽',
+                          const Text(
+                            'Steigenberger Makadi',
                             style: TextStyle(
-                              textBaseline: TextBaseline.ideographic,
+                              fontSize: 22,
                               color: Colors.black,
-                              fontSize: 30,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(width: 8.0),
                           Text(
-                            'за тур с перелётом',
-                            style: TextStyle(
-                              color: AppColors.greyText,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                            hotel.adress,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.blueText,
+                              fontWeight: FontWeight.w500,
                             ),
+                          ),
+                          const SizedBox(height: 15.0),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Text(
+                                'от $startHotelMinimalPrice $endHotelMinimalPrice ₽',
+                                style: const TextStyle(
+                                  textBaseline: TextBaseline.ideographic,
+                                  color: Colors.black,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: 8.0),
+                              const Text(
+                                'за тур с перелётом',
+                                style: TextStyle(
+                                  color: AppColors.greyText,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -181,6 +210,7 @@ class _HotelWidgetState extends State<HotelWidget> {
                   ),
                 ),
               ),
+              // about the hotel
               const AboutHotelWidget(),
               const SelectionButtonWidget(),
             ],
