@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 
 part 'hotel.g.dart';
 
@@ -12,8 +13,8 @@ class Hotel {
   final int rating;
   final String ratingName;
 
-  // final List<String> imageUrls;
-  // final AboutTheHotel aboutTheHotel;
+  final List<String> imageUrls;
+  final AboutTheHotel aboutTheHotel;
 
   const Hotel({
     required this.id,
@@ -23,8 +24,8 @@ class Hotel {
     required this.priceForIt,
     required this.rating,
     required this.ratingName,
-    // required this.imageUrls,
-    // required this.aboutTheHotel,
+    required this.imageUrls,
+    required this.aboutTheHotel,
   });
 
   factory Hotel.fromJson(Map<String, dynamic> json) => _$HotelFromJson(json);

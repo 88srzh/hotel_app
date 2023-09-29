@@ -5,9 +5,12 @@ part 'about_the_hotel.g.dart';
 @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
 class AboutTheHotel {
   final String description;
-  final String peculiarities;
+  final List<String> peculiarities;
 
-  AboutTheHotel({required this.description, required this.peculiarities});
+  AboutTheHotel({
+    required this.description,
+    required this.peculiarities,
+  });
 
   factory AboutTheHotel.fromJson(Map<String, dynamic> json) => _$AboutTheHotelFromJson(json);
 

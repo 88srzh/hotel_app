@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_app/domain/api_client/network_client.dart';
+import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
@@ -18,7 +19,17 @@ class HotelWidget extends StatefulWidget {
 }
 
 class _HotelWidgetState extends State<HotelWidget> {
-  var hotel = const Hotel(id: 0, name: '', adress: '', minimalPrice: 0, priceForIt: '', rating: 0, ratingName: '');
+  var hotel = Hotel(
+    id: 0,
+    name: '',
+    adress: '',
+    minimalPrice: 0,
+    priceForIt: '',
+    rating: 0,
+    ratingName: '',
+    imageUrls: [],
+    aboutTheHotel: AboutTheHotel(description: '', peculiarities: []),
+  );
 
   void getHotelData() async {
     final hotelJson = await getNetworkData();
@@ -36,7 +47,7 @@ class _HotelWidgetState extends State<HotelWidget> {
     getHotelData();
   }
 
-  // int _currentPhoto = 0;
+  int _currentPhoto = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +68,6 @@ class _HotelWidgetState extends State<HotelWidget> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // PhotoCarouselWidget(hotels: hotel),
               SizedBox(
                 height: 530.0,
                 width: 375.0,
@@ -77,18 +87,18 @@ class _HotelWidgetState extends State<HotelWidget> {
                             ),
                             child: PageView.builder(
                               onPageChanged: (value) {
-                                // setState(() {
-                                //   _currentPhoto = value;
-                                // });
+                                setState(() {
+                                  _currentPhoto = value;
+                                });
                               },
                               // TODO change item count
-                              itemCount: 3,
+                              itemCount: hotel.imageUrls.length,
                               itemBuilder: (BuildContext context, int index) {
-                                // final posterPath = Configuration.imageUrls[index];
+                                final image = hotel.imageUrls[index];
                                 return Container(
                                   padding: const EdgeInsets.only(right: 10),
                                   child: CachedNetworkImage(
-                                    imageUrl: 'https://www.gstatic.com/webp/gallery3/1.sm.png',
+                                    imageUrl: image,
                                     placeholder: (context, url) => const LoadingIndicatorWidget(),
                                     errorWidget: (context, url, dynamic error) => Image.asset(AppImages.noImage),
                                   ),
@@ -96,25 +106,23 @@ class _HotelWidgetState extends State<HotelWidget> {
                               },
                             ),
                           ),
-                          // Positioned(
-                          //   left: 50,
-                          //   top: 40,
-                          //   right: 50,
-                          //   bottom: 10,
-                          //   child: Align(
-                          //     alignment: Alignment.bottomCenter,
-                          //     child: Row(
-                          //       mainAxisAlignment: MainAxisAlignment.center,
-                          //       children: [
-                          //         List.generate(
-                          //           20,
-                          //           (index) => buildDot(index: index),
-                          //           growable: false,
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
+                          Positioned(
+                            left: 50,
+                            top: 40,
+                            right: 50,
+                            bottom: 10,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(
+                                  3,
+                                  (index) => buildDot(index: index),
+                                  growable: false,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10.0),
@@ -193,17 +201,18 @@ class _HotelWidgetState extends State<HotelWidget> {
       //         child: CircularProgressIndicator(),
     );
   }
-}
 
-// AnimatedContainer buildDot({int? index}) {
-//   return AnimatedContainer(
-//     duration: const Duration(milliseconds: 300),
-//     margin: const EdgeInsets.only(right: 5.0),
-//     height: 6,
-//     width: _currentPhoto == index ? 20 : 6,
-//     decoration: BoxDecoration(
-//       refactoring color
-// color: _currentPhoto == index ? Colors.white : Colors.black,
-// borderRadius: BorderRadius.circular(3),
-// ),
-// );
+  AnimatedContainer buildDot({int? index}) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.only(right: 5.0),
+      height: 6,
+      width: _currentPhoto == index ? 10 : 6,
+      decoration: BoxDecoration(
+        // refactoring color
+        color: _currentPhoto == index ? Colors.white : Colors.black,
+        borderRadius: BorderRadius.circular(3),
+      ),
+    );
+  }
+}
