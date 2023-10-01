@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/custom_divider.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/custom_listtile.dart';
-import 'package:hotel_app/ui/widgets/hotel/components/hotel_cubit.dart';
 
 class AboutHotelWidget extends StatelessWidget {
   const AboutHotelWidget({super.key});

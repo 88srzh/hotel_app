@@ -12,9 +12,11 @@ class Network {
 
     if (response.statusCode == 200) {
       return response.body;
-    } else {
-      return 'network error';
-    }
+    } else if (response.statusCode == 404) {
+      return 'Not found';
+    } else if (response.statusCode == 500) {
+      return 'Server not responding';
+    }  return 'Network error';
   }
 }
 
