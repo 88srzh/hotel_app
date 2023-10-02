@@ -1,74 +1,27 @@
-import 'dart:io';
-import 'dart:convert';
+import 'dart:async';
 
-import 'package:hotel_app/configuration/configuration.dart';
-import 'package:flutter/foundation.dart';
-import 'package:hotel_app/domain/api_client/api_client_exception.dart';
+import 'package:http/http.dart';
 
-class NetworkClient {
-  final _client = HttpClient();
+class Network {
+  final String url;
 
-  Uri _makeUri(String path, [Map<String, dynamic>? parameters]) {
-    final uri = Uri.parse('${Configuration.host}$path');
-    if (parameters != null) {
-      return uri.replace(queryParameters: parameters);
-    } else {
-      return uri;
-    }
-  }
+  Network(this.url);
 
-  Future<T> get<T>(String path,
-      T Function(dynamic json) parser, [
-        Map<String, dynamic>? parameters,
-      ]) async {
-    final url = _makeUri(path, parameters);
-    final request = await _client.getUrl(url);
-    final response = await request.close();
-    final dynamic json = (await response.jsonDecode());
-    if (response.statusCode == 401) {
-      final dynamic status = json['status_code'];
-      final code = status is int ? status : 0;
-      if (code == 30) {
-        throw ApiClientException(ApiClientExceptionType.auth);
-      } else {
-        throw ApiClientException(ApiClientExceptionType.other);
-      }
-    }
-    _validateResponse(response, json);
-    final result = parser(json);
-    return result;
-  }
+  Future<String> getData() async {
+    final response = await get(Uri.parse(url));
 
-  void _validateResponse(HttpClientResponse response, dynamic json) {
-    if (response.statusCode == 401) {
-      final dynamic status = json['status_code'];
-      final code = status is int ? status : 0;
-      switch (code) {
-        case 30:
-          if (kDebugMode) {
-            print('Invalid username and/or password: You did not provide a valid login.');
-          }
-          throw ApiClientException(ApiClientExceptionType.auth);
-      }
-      throw ApiClientException(ApiClientExceptionType.other);
-    }
+    if (response.statusCode == 200) {
+      return response.body;
+    } else if (response.statusCode == 404) {
+      return 'Not found';
+    } else if (response.statusCode == 500) {
+      return 'Server not responding';
+    }  return 'Network error';
   }
 }
 
-  extension HttpClientResponseJsonDecode
-
-  on HttpClientResponse
-
-  {
-
-  Future<dynamic> jsonDecode() async {
-    return transform(utf8.decoder)
-        .toList()
-        // .then((value) => value.join())
-    .then((value) {
-      final result = value.join();
-      return result;
-    })
-        .then<dynamic>((v) => json.decode(v));
-  }
+Future<String> getNetworkData() async {
+  final network = Network('https://run.mocky.io/v3/35e0d18e-2521-4f1b-a575-f0fe366f66e3');
+  final networkData = await network.getData();
+  return networkData;
 }

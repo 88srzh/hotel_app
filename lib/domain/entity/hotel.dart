@@ -12,6 +12,7 @@ class Hotel {
   final String priceForIt;
   final int rating;
   final String ratingName;
+
   final List<String> imageUrls;
   final AboutTheHotel aboutTheHotel;
 
