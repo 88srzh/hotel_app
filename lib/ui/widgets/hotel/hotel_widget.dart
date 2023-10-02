@@ -9,7 +9,6 @@ import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
-import 'package:hotel_app/ui/widgets/hotel/components/selection_button_widget.dart';
 
 class HotelWidget extends StatefulWidget {
   const HotelWidget({super.key});
@@ -211,10 +210,39 @@ class _HotelWidgetState extends State<HotelWidget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10.0),
               // about the hotel
               AboutHotelWidget(peculiarities: peculiarities, hotel: hotel),
-              const SelectionButtonWidget(),
+              const SizedBox(height: 10.0),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                width: double.infinity,
+                height: 88,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 343,
+                      height: 48,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                          backgroundColor: AppColors.hotelBottomButtonColor,
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'К выбору номера',
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // const SelectionButtonWidget(),
             ],
           ),
         ],
