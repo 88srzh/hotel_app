@@ -1,8 +1,19 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'room.g.dart';
+
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
+class Rooms {
+  final List<Room> rooms;
+
+  const Rooms({
+    required this.rooms,
+  });
+
+  factory Rooms.fromJson(Map<String, dynamic> json) => _$RoomsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RoomsToJson(this);
+}
 
 @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
 class Room {
@@ -23,5 +34,6 @@ class Room {
   });
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
+
   Map<String, dynamic> toJson() => _$RoomToJson(this);
 }

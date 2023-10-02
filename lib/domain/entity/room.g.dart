@@ -6,6 +6,16 @@ part of 'room.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+Rooms _$RoomsFromJson(Map<String, dynamic> json) => Rooms(
+      rooms: (json['rooms'] as List<dynamic>)
+          .map((e) => Room.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$RoomsToJson(Rooms instance) => <String, dynamic>{
+      'rooms': instance.rooms.map((e) => e.toJson()).toList(),
+    };
+
 Room _$RoomFromJson(Map<String, dynamic> json) => Room(
       id: json['id'] as int,
       name: json['name'] as String,

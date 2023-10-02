@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
 
 void main() {
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HotelWidget(),
+      // home: const HotelWidget(),
+      home: const RoomWidget(),
     );
   }
 }
