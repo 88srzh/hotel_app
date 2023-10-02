@@ -16,7 +16,7 @@ class _RoomWidgetState extends State<RoomWidget> {
 
   void getRoomData() async {
     final roomListJson = await getNetworkDataForRoom();
-    print(roomListJson);
+    // print(roomListJson);
     final dynamic roomListMap = json.decode(roomListJson);
 
     setState(() {
@@ -33,7 +33,17 @@ class _RoomWidgetState extends State<RoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Steigenberger Makadi')),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Steigenberger Makadi',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {},
+        ),
+      ),
       body: ListView(
         children: const [],
       ),
