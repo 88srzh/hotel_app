@@ -53,6 +53,7 @@ class _HotelWidgetState extends State<HotelWidget> {
   Widget build(BuildContext context) {
     final String startHotelMinimalPrice = hotel.minimalPrice.toStringAsFixed(4).substring(0, 3);
     final String endHotelMinimalPrice = hotel.minimalPrice.toStringAsFixed(4).substring(3, 6);
+    var peculiarities = makePeculiarities(hotel);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -210,25 +211,14 @@ class _HotelWidgetState extends State<HotelWidget> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
               // about the hotel
-              const AboutHotelWidget(),
+              AboutHotelWidget(peculiarities: peculiarities, hotel: hotel),
               const SelectionButtonWidget(),
             ],
           ),
         ],
       ),
-      // body: FutureBuilder<List<Hotel>>(
-      //   future: getNetworkData(http.Client()),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasError) {
-      //       return Center(
-      //         child: Text('${snapshot.error}'),
-      //       );
-      //     } else if (snapshot.hasData) {
-      //       return HotelWidgetBody(hotels: snapshot.data!);
-      //     } else {
-      //       return const Center(
-      //         child: CircularProgressIndicator(),
     );
   }
 
@@ -244,5 +234,17 @@ class _HotelWidgetState extends State<HotelWidget> {
         borderRadius: BorderRadius.circular(3),
       ),
     );
+  }
+
+  String makePeculiarities(Hotel hotel) {
+    var texts = <String>[];
+    if (hotel.aboutTheHotel.peculiarities.isNotEmpty) {
+      var names = <String>[];
+      for (var name in hotel.aboutTheHotel.peculiarities) {
+        names.add(name.characters.string);
+      }
+      texts.add(names.join('     '));
+    }
+    return texts.join(' ');
   }
 }
