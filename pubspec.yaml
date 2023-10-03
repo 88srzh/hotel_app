@@ -73,7 +73,6 @@ flutter:
     - family: SF PRO DISPLAY
       fonts:
         - asset: fonts/SFPRODISPLAYREGULAR.OTF
-          weight: 500
         - asset: fonts/SFPRODISPLAYBOLD.OTF
           style: normal
           weight: 700

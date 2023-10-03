@@ -58,12 +58,14 @@ class _RoomWidgetState extends State<RoomWidget> {
         child: ListView.builder(
           itemCount: roomList.rooms.length,
           itemBuilder: (context, index) {
+            final String startHotelMinimalPrice = roomList.rooms[index].price.toStringAsFixed(4).substring(0, 3);
+            final String endHotelMinimalPrice = roomList.rooms[index].price.toStringAsFixed(4).substring(3, 6);
             var peculiarities = makeRoomPeculiarities(roomList, index);
             return Column(
               children: [
                 const SizedBox(height: 5.0),
                 Container(
-                  height: 539,
+                  height: 539.0,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -142,14 +144,14 @@ class _RoomWidgetState extends State<RoomWidget> {
                             ),
                             const SizedBox(height: 5.0),
                             Container(
-                              width: 202.0,
+                              width: 192.0,
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(5)),
                                 color: AppColors.roomDetailsBackgroundColor,
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
-                                  Padding(
+                                  const Padding(
                                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0, right: 2.0),
                                     child: Align(
                                       alignment: Alignment.center,
@@ -163,8 +165,59 @@ class _RoomWidgetState extends State<RoomWidget> {
                                       ),
                                     ),
                                   ),
-                                  Icon(Icons.arrow_forward_ios, color: AppColors.roomDetailsTextColor, size: 24),
+                                  Image.asset(AppImages.forwardArrow),
                                 ],
+                              ),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  '$startHotelMinimalPrice $endHotelMinimalPrice ₽',
+                                  style: const TextStyle(
+                                    textBaseline: TextBaseline.ideographic,
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Text(
+                                  roomList.rooms[index].pricePer.toLowerCase(),
+                                  style: const TextStyle(
+                                    color: AppColors.greyText,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              width: double.infinity,
+                              height: 88,
+                              child: Center(
+                                child: SizedBox(
+                                  width: 343,
+                                  height: 48,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                      backgroundColor: AppColors.hotelBottomButtonColor,
+                                      elevation: 0,
+                                    ),
+                                    child: const Text(
+                                      'К выбору номера',
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
                               ),
                             ),
                           ],
