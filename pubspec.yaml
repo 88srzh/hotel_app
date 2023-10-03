@@ -73,9 +73,9 @@ flutter:
     - family: SF PRO DISPLAY
       fonts:
         - asset: fonts/SFPRODISPLAYREGULAR.OTF
-        - asset: fonts/SFPRODISPLAYBOLD.OTF
+#        - asset: fonts/SFPRODISPLAYBOLD.OTF
           style: normal
-          weight: 700
+          weight: 600
 
 #   To add assets to your application, add an assets section, like this:
   assets:
