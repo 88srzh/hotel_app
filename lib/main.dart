@@ -19,9 +19,13 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SF Pro Display',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          color: Colors.white,
+          centerTitle: true,
+        )
       ),
       // home: const HotelWidget(),
-      home: const RoomWidget(),
+      home: const HotelWidget(),
     );
   }
 }

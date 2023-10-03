@@ -47,7 +47,9 @@ class _RoomWidgetState extends State<RoomWidget> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Container(
@@ -63,7 +65,7 @@ class _RoomWidgetState extends State<RoomWidget> {
             var peculiarities = makeRoomPeculiarities(roomList, index);
             return Column(
               children: [
-                const SizedBox(height: 5.0),
+                const SizedBox(height: 10.0),
                 Container(
                   height: 539.0,
                   decoration: const BoxDecoration(
