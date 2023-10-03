@@ -45,7 +45,7 @@ class _RoomWidgetState extends State<RoomWidget> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Image.asset(AppImages.backwardArrow),
           onPressed: () {
             Navigator.pop(context);
           },
