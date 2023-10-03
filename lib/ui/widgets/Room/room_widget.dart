@@ -140,23 +140,30 @@ class _RoomWidgetState extends State<RoomWidget> {
                                 backgroundColor: AppColors.greyBackgroundText,
                               ),
                             ),
+                            const SizedBox(height: 5.0),
                             Container(
+                              width: 202.0,
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(5)),
                                 color: AppColors.roomDetailsBackgroundColor,
                               ),
                               child: const Row(
                                 children: [
-                                  Text(
-                                    'Подробнее о номере',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.roomDetailsTextColor,
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0, right: 2.0),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Подробнее о номере',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.roomDetailsTextColor,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(width: 5.0),
-                                  Icon(Icons.arrow_forward_ios),
+                                  Icon(Icons.arrow_forward_ios, color: AppColors.roomDetailsTextColor, size: 24),
                                 ],
                               ),
                             ),
