@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
 
 void main() {
@@ -15,10 +16,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        fontFamily: ' .SF Pro Display',
+        fontFamily: 'SF Pro Display',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          color: Colors.white,
+          centerTitle: true,
+        )
       ),
+      // home: const HotelWidget(),
       home: const HotelWidget(),
     );
   }

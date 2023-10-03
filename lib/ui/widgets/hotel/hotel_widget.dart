@@ -8,6 +8,7 @@ import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
+import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
 
 class HotelWidget extends StatefulWidget {
@@ -52,7 +53,7 @@ class _HotelWidgetState extends State<HotelWidget> {
   Widget build(BuildContext context) {
     final String startHotelMinimalPrice = hotel.minimalPrice.toStringAsFixed(4).substring(0, 3);
     final String endHotelMinimalPrice = hotel.minimalPrice.toStringAsFixed(4).substring(3, 6);
-    var peculiarities = makePeculiarities(hotel);
+    var peculiarities = makeHotelPeculiarities(hotel);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -104,7 +105,6 @@ class _HotelWidgetState extends State<HotelWidget> {
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(15)),
                                   ),
-                                  padding: const EdgeInsets.only(right: 10),
                                   child: CachedNetworkImage(
                                     imageUrl: image,
                                     fit: BoxFit.fill,
@@ -236,7 +236,12 @@ class _HotelWidgetState extends State<HotelWidget> {
                           'К выбору номера',
                           style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const RoomWidget()),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -264,7 +269,7 @@ class _HotelWidgetState extends State<HotelWidget> {
     );
   }
 
-  String makePeculiarities(Hotel hotel) {
+  String makeHotelPeculiarities(Hotel hotel) {
     var texts = <String>[];
     if (hotel.aboutTheHotel.peculiarities.isNotEmpty) {
       var names = <String>[];
