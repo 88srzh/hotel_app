@@ -20,7 +20,6 @@ class _RoomWidgetState extends State<RoomWidget> {
 
   void getRoomData() async {
     final roomListJson = await getNetworkDataForRoom();
-    // print(roomListJson);
     final dynamic roomListMap = json.decode(roomListJson);
 
     setState(() {
@@ -80,6 +79,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                           children: [
                             Container(
                               height: 257,
+                              clipBehavior: Clip.antiAlias,
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(15)),
                               ),
