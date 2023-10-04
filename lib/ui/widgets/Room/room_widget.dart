@@ -7,6 +7,7 @@ import 'package:hotel_app/domain/entity/room.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
+import 'package:hotel_app/ui/components/headline_text_widget.dart';
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
@@ -131,10 +132,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              roomList.rooms[index].name,
-                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                            ),
+                            HeadlineTextWidget(text: roomList.rooms[index].name),
                             Text(
                               peculiarities,
                               style: const TextStyle(

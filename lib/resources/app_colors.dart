@@ -10,4 +10,6 @@ abstract class AppColors {
   static const hotelBottomButtonColor = Color.fromRGBO(13, 114, 255, 1.0);
   static const roomDetailsTextColor = Color.fromRGBO(13, 114, 255, 1.0);
   static const roomDetailsBackgroundColor = Color.fromRGBO(13, 114, 255, 0.1);
+  static const formBackgroundColor = Color.fromRGBO(246, 246, 249, 1.0);
+  static const formLabelTextColor = Color.fromRGBO(169, 171, 183, 1.0);
 }

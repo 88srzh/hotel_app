@@ -8,6 +8,7 @@ import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
+import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
 
@@ -163,14 +164,7 @@ class _HotelWidgetState extends State<HotelWidget> {
                               ),
                             ),
                           ),
-                          const Text(
-                            'Steigenberger Makadi',
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          const HeadlineTextWidget(text: 'Steigenberger Makadi'),
                           Text(
                             hotel.adress,
                             style: const TextStyle(

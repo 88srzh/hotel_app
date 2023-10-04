@@ -5,6 +5,8 @@ import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/headline_text_widget.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key});
@@ -49,6 +51,12 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var phoneController = TextEditingController();
+    var emailController = TextEditingController();
+    String phone;
+    String email;
+    final emailFormKey = GlobalKey<FormState>();
+    final phoneFormKey = GlobalKey<FormState>();
     return Scaffold(
       // TODO add to separate widget
       appBar: AppBar(
@@ -107,10 +115,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                    const Text(
-                      'Steigenberger Makadi',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                    ),
+                    const HeadlineTextWidget(text: 'Steigenberger Makadi'),
                     Text(
                       reservation.hotelAdress,
                       style: const TextStyle(fontSize: 14, color: AppColors.blueText),
@@ -134,36 +139,44 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       ReservationBlackDataText(reservation: reservation.departure),
                     ],
                   ),
+                  const SizedBox(height: 10.0),
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Страна, город'),
                       ReservationBlackDataText(reservation: reservation.arrivalCountry),
                     ],
                   ),
+                  const SizedBox(height: 10.0),
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Даты'),
                       ReservationBlackDataText(reservation: '${reservation.tourDateStart} - ${reservation.tourDateStop}')
                     ],
                   ),
+                  const SizedBox(height: 10.0),
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Кол-во ночей'),
                       ReservationBlackDataText(reservation: reservation.numberOfNights.toString()),
                     ],
                   ),
+                  const SizedBox(height: 10.0),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
                     children: [
                       const ReservationGreyDataText(text: 'Отель'),
                       Expanded(child: ReservationBlackDataText(reservation: reservation.hotelName)),
                     ],
                   ),
+                  const SizedBox(height: 10.0),
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Номер'),
                       ReservationBlackDataText(reservation: reservation.room),
                     ],
                   ),
+                  const SizedBox(height: 10.0),
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Питание'),
@@ -179,10 +192,55 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const HeadlineTextWidget(text: 'Информация о покупателе'),
+                  const SizedBox(height: 10.0),
+                  IntlPhoneField(
+                    key: phoneFormKey,
+                    onChanged: (phone) {
+                      print(phone.completeNumber);
+                    },
+                    initialCountryCode: 'RU',
+                    showDropdownIcon: false,
+                    showCountryFlag: false,
+                    disableLengthCheck: true,
+                    keyboardType: TextInputType.phone,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Номер телефона',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: emailFormKey,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите текст';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Почта',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
                   const Text(
-                    'Информация о покупателе',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                    'Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту',
+                    style: TextStyle(color: AppColors.greyText, fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
