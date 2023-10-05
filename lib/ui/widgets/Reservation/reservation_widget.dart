@@ -57,6 +57,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     String email;
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
+    final nameKey = GlobalKey<FormState>();
+    final surnameKey = GlobalKey<FormState>();
     return Scaffold(
       // TODO add to separate widget
       appBar: AppBar(
@@ -186,6 +188,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
+            // information about customer
             Container(
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -245,6 +248,75 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
+            // first customer
+            const SizedBox(height: 10.0),
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const HeadlineTextWidget(text: 'Первый турист'),
+                      Image.asset(AppImages.upArrow),
+                    ],
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: nameKey,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Имя';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.name,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      focusedBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      enabledBorder: InputBorder.none,
+                      labelText: 'Имя',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: surnameKey,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Фамилия';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.name,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      // border: OutlineInputBorder(
+                      //   borderSide: BorderSide(color: AppColors.formBackgroundColor),
+                      //   borderRadius: BorderRadius.all(Radius.circular(10)),
+                      // ),
+                      // enabledBorder: InputBorder.none,
+                      labelText: 'Фамилия',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+
+                ],
+              ),
+            )
           ],
         ),
       ),

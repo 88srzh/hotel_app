@@ -9,5 +9,6 @@ class AppImages {
   static const String closeSquare = 'images/icons/close-square.png';
   static const String forwardArrow = 'images/icons/forward_arrow.png';
   static const String backwardArrow = 'images/icons/navigation_bar/arrow_back.png';
+  static const String upArrow = 'images/icons/up_arrow.png';
 
 }
