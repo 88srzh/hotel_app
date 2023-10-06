@@ -59,6 +59,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final phoneFormKey = GlobalKey<FormState>();
     final nameKey = GlobalKey<FormState>();
     final surnameKey = GlobalKey<FormState>();
+    final birthdayKey = GlobalKey<FormState>();
+    final citizenship = GlobalKey<FormState>();
+    final passportNumber = GlobalKey<FormState>();
+    final passportValidityPeriod = GlobalKey<FormState>();
+
     return Scaffold(
       // TODO add to separate widget
       appBar: AppBar(
@@ -279,12 +284,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     keyboardType: TextInputType.name,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
-                      focusedBorder: InputBorder.none,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide(color: Colors.transparent),
                       ),
-                      enabledBorder: InputBorder.none,
                       labelText: 'Имя',
                       labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
                     ),
@@ -304,16 +307,106 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     keyboardType: TextInputType.name,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
-                      // border: OutlineInputBorder(
-                      //   borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                      //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                      // ),
-                      // enabledBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
                       labelText: 'Фамилия',
                       labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                   ),
-
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: birthdayKey,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Дата рождения';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.datetime,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Дата рождения',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: citizenship,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Гражданство';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.text,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Гражданство',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: passportNumber,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Номер паспорта';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.text,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Номер паспорта',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    key: passportValidityPeriod,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Срок действия загранпаспорта';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.text,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Срок действия загранпаспорта',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                  ),
                 ],
               ),
             )

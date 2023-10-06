@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: InputBorder.none,
+          // enabledBorder: InputBorder.none,
           filled: true,
           fillColor: AppColors.formBackgroundColor,
-          outlineBorder: BorderSide(color: AppColors.formBackgroundColor, style: BorderStyle.none),
+          outlineBorder: BorderSide(color: AppColors.formBackgroundColor, style: BorderStyle.solid),
         ),
         fontFamily: 'SF Pro Display',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
