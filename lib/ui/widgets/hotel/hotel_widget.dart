@@ -208,6 +208,7 @@ class _HotelWidgetState extends State<HotelWidget> {
               // about the hotel
               AboutHotelWidget(peculiarities: peculiarities, hotel: hotel),
               const SizedBox(height: 10.0),
+              // bottom button widget
               Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,

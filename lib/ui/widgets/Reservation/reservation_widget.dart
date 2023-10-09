@@ -64,6 +64,13 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final passportNumber = GlobalKey<FormState>();
     final passportValidityPeriod = GlobalKey<FormState>();
 
+    // TODO need to fix to normal formula with formatter may be?
+    final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
+    final String endTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(3, 6);
+    final String fuelCharge = reservation.fuelCharge.toString();
+    final String serviceCharge = reservation.serviceCharge.toString();
+    final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
+
     return Scaffold(
       // TODO add to separate widget
       appBar: AppBar(
@@ -74,7 +81,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         centerTitle: true,
         leading: IconButton(
           icon: Image.asset(AppImages.backwardArrow),
-          // icon: const Icon(Icons.arrow_back_ios, size: 44,),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -407,12 +413,123 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                   ),
+                  const SizedBox(height: 10.0),
                 ],
               ),
-            )
+            ),
+            const SizedBox(height: 10.0),
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const HeadlineTextWidget(text: 'Второй турист'),
+                    Image.asset(AppImages.downArrow),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const HeadlineTextWidget(text: 'Добавить туриста'),
+                    Image.asset(AppImages.addArrow),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
+                  children: [
+                    ReservationTourPrices(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽'),
+                    const SizedBox(height: 10.0),
+                    ReservationTourPrices(header: 'Топливный сбор', amount: '$fuelCharge ₽'),
+                    const SizedBox(height: 10.0),
+                    ReservationTourPrices(header: 'Сервисный сбор', amount: '$serviceCharge ₽'),
+                    const SizedBox(height: 10.0),
+                    ReservationTourPrices(header: 'К оплате', amount: '$payable ₽'),
+                    const SizedBox(height: 10.0),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(color: Colors.white),
+              width: double.infinity,
+              height: 88,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Center(
+                  child: SizedBox(
+                    width: 343,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                        backgroundColor: AppColors.hotelBottomButtonColor,
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Оплатить $payable ₽',
+                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ReservationTourPrices extends StatelessWidget {
+  const ReservationTourPrices({
+    super.key,
+    required this.header,
+    required this.amount,
+  });
+
+  final String header;
+  final String amount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          header,
+          style: const TextStyle(fontSize: 16, color: AppColors.greyText, fontWeight: FontWeight.w400),
+        ),
+        Text(
+          amount,
+          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
+        )
+      ],
     );
   }
 }
