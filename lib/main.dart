@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/resources/app_colors.dart';
+import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
 import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: const HotelWidget(),
       // home: const HotelWidget(),a
-      home: const ReservationWidget(),
+      // home: const ReservationWidget(),
+      home: const OrderPaidWidget(),
     );
   }
 }

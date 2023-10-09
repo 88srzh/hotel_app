@@ -11,6 +11,7 @@ class AppImages {
   static const String backwardArrow = 'images/icons/navigation_bar/arrow_back.png';
   static const String upArrow = 'images/icons/up_arrow.png';
   static const String downArrow = 'images/icons/down_arrow.png';
-  static const addArrow = 'images/icons/add_arrow.png';
+  static const String addArrow = 'images/icons/add_arrow.png';
+  static const String congratulationsIcon = 'images/icons/congratulations.png';
 
 }
