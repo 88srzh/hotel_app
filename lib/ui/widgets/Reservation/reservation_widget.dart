@@ -214,7 +214,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   IntlPhoneField(
                     key: phoneFormKey,
                     onChanged: (phone) {
-                      print(phone.completeNumber);
+                      // print(phone.completeNumber);
                     },
                     initialCountryCode: 'RU',
                     showDropdownIcon: false,

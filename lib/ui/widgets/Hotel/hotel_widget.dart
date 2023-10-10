@@ -7,7 +7,7 @@ import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
-import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
+import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
