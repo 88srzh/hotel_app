@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
+import 'package:hotel_app/domain/services/auth_data_storage.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
@@ -56,16 +57,28 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   Widget build(BuildContext context) {
     var phoneController = TextEditingController();
     var emailController = TextEditingController();
+    var nameController = TextEditingController();
+    var surnameController = TextEditingController();
+    var birthdayController = TextEditingController();
+    var citizenshipController = TextEditingController();
+    var passwordNumberController = TextEditingController();
+    var passwordValidityPeriodController = TextEditingController();
     String phone;
     String email;
+    String name;
+    String surname;
+    String birthday;
+    String citizenship;
+    String passwordNumber;
+    String passportValidityPeriod;
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
     final nameKey = GlobalKey<FormState>();
     final surnameKey = GlobalKey<FormState>();
     final birthdayKey = GlobalKey<FormState>();
-    final citizenship = GlobalKey<FormState>();
-    final passportNumber = GlobalKey<FormState>();
-    final passportValidityPeriod = GlobalKey<FormState>();
+    final citizenshipKey = GlobalKey<FormState>();
+    final passportNumberKey = GlobalKey<FormState>();
+    final passportValidityPeriodKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
     final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
@@ -76,7 +89,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
     return Scaffold(
       // TODO add to separate widget
-      appBar:  const CustomAppBarWidget(title: 'Бронирование'),
+      appBar: const CustomAppBarWidget(title: 'Бронирование'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
@@ -268,6 +281,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    controller: nameController,
                     key: nameKey,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -276,18 +290,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       return null;
                     },
                     onChanged: (value) {
-                      email = value;
+                      name = value;
                     },
                     keyboardType: TextInputType.name,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      labelText: 'Имя',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
+                    decoration: textFormFieldDecorationWidget('Имя'),
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
@@ -303,14 +310,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     },
                     keyboardType: TextInputType.name,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Фамилия',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
+                    decoration: textFormFieldDecorationWidget('Фамилия'),
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
@@ -326,18 +326,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     },
                     keyboardType: TextInputType.datetime,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Дата рождения',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
+                    decoration: textFormFieldDecorationWidget('Дата рождения'),
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
-                    key: citizenship,
+                    key: citizenshipKey,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Гражданство';
@@ -349,18 +342,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     },
                     keyboardType: TextInputType.text,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Гражданство',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
+                    decoration: textFormFieldDecorationWidget('Гражданство'),
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
-                    key: passportNumber,
+                    key: passportNumberKey,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Номер паспорта';
@@ -370,20 +356,13 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     onChanged: (value) {
                       email = value;
                     },
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Номер паспорта',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
+                    decoration: textFormFieldDecorationWidget('Номер паспорта'),
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
-                    key: passportValidityPeriod,
+                    key: passportValidityPeriodKey,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Срок действия загранпаспорта';
@@ -395,14 +374,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     },
                     keyboardType: TextInputType.text,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Срок действия загранпаспорта',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
+                    decoration: textFormFieldDecorationWidget('Срок действия загранпаспорта'),
                   ),
                   const SizedBox(height: 10.0),
                 ],
@@ -473,6 +445,18 @@ class _ReservationWidgetState extends State<ReservationWidget> {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
         },
       ),
+    );
+  }
+
+  InputDecoration textFormFieldDecorationWidget(String text) {
+    return InputDecoration(
+      errorText: 'Поле обязательно для заполнения',
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderSide: BorderSide(color: Colors.transparent),
+      ),
+      labelText: text,
+      labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
     );
   }
 }
