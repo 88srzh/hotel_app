@@ -6,7 +6,6 @@ import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/room.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
-import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
@@ -197,6 +196,33 @@ class _RoomWidgetState extends State<RoomWidget> {
                               ],
                             ),
                             const SizedBox(height: 10.0),
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              width: double.infinity,
+                              height: 88,
+                              child: Center(
+                                child: SizedBox(
+                                  width: 343,
+                                  height: 48,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                      backgroundColor: AppColors.hotelBottomButtonColor,
+                                      elevation: 0,
+                                    ),
+                                    child: const Text(
+                                      'К выбору номера',
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
+                                    },
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ],
@@ -208,12 +234,12 @@ class _RoomWidgetState extends State<RoomWidget> {
           },
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        text: 'К выбору номера',
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
-        },
-      ),
+      // bottomNavigationBar: CustomBottomNavigationBar(
+      //   text: 'К выбору номера',
+      //   onPressed: () {
+      //     Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
+      //   },
+      // ),
     );
   }
 
