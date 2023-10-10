@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
-import 'package:hotel_app/domain/services/auth_data_storage.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
@@ -55,6 +55,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final _mobileFormatter = PhoneNumberTextInputFormatter();
     var phoneController = TextEditingController();
     var emailController = TextEditingController();
     var nameController = TextEditingController();
@@ -120,6 +121,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                             const Icon(Icons.star, color: AppColors.orangeText, size: 15),
                             Text(
                               reservation.horating.toString(),
+                              // TODO add to separate widget
                               style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(width: 5.0),
@@ -214,15 +216,16 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 children: [
                   const HeadlineTextWidget(text: 'Информация о покупателе'),
                   const SizedBox(height: 10.0),
-                  IntlPhoneField(
+                  TextFormField(
                     key: phoneFormKey,
                     onChanged: (phone) {
                       // print(phone.completeNumber);
                     },
-                    initialCountryCode: 'RU',
-                    showDropdownIcon: false,
-                    showCountryFlag: false,
-                    disableLengthCheck: true,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      _mobileFormatter,
+                    ],
+                    maxLength: 13,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
@@ -545,6 +548,47 @@ class ReservationGreyDataText extends StatelessWidget {
         text,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: AppColors.greyText),
       ),
+    );
+  }
+}
+
+class PhoneNumberTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final int newTextLength = newValue.text.length;
+    int selectionIndex = newValue.selection.end;
+    int usedSubstringIndex = 0;
+    final StringBuffer newText = StringBuffer();
+    if (newTextLength >= 2) {
+      newText.write('${newValue.text.substring(0, usedSubstringIndex = 1)}-');
+      if (newValue.selection.end >= 2) {
+        selectionIndex += 2;
+      }
+    }
+    if (newTextLength >= 5) {
+      newText.write('${newValue.text.substring(0, usedSubstringIndex = 4)}-');
+      if (newValue.selection.end >= 4) {
+        selectionIndex += 2;
+      }
+    }
+    if (newTextLength >= 7) {
+      newText.write(newValue.text.substring(4, usedSubstringIndex = 7));
+      if (newValue.selection.end >= 7) {
+        selectionIndex++;
+      }
+    }
+    if (newTextLength >= 8) {
+      newText.write('-${newValue.text.substring(7, usedSubstringIndex = 8)}');
+      if (newValue.selection.end >= 11) {
+        selectionIndex++;
+      }
+    }
+    if (newTextLength >= usedSubstringIndex) {
+      newText.write(newValue.text.substring(usedSubstringIndex));
+    }
+    return TextEditingValue(
+      text: newText.toString(),
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }
