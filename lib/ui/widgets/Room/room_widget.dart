@@ -8,6 +8,7 @@ import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
@@ -215,7 +216,9 @@ class _RoomWidgetState extends State<RoomWidget> {
                                       'К выбору номера',
                                       style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
+                                    },
                                   ),
                                 ),
                               ),

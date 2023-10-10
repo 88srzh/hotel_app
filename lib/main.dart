@@ -33,10 +33,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         )
       ),
-      // home: const HotelWidget(),
-      // home: const HotelWidget(),a
-      // home: const ReservationWidget(),
-      home: const OrderPaidWidget(),
+      home: const HotelWidget(),
     );
   }
 }

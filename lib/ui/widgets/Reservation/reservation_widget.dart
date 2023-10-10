@@ -6,6 +6,7 @@ import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
+import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class ReservationWidget extends StatefulWidget {
@@ -493,7 +494,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                         'Оплатить $payable ₽',
                         style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+                      },
                     ),
                   ),
                 ),
