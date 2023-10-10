@@ -9,7 +9,7 @@ class HotelList {
 
   factory HotelList.fromJson(final dynamic json) {
     return HotelList(
-        hotels: (json as List<dynamic>).map((dynamic e) => Hotel.fromJson(e as Map<String, dynamic>)).toList(),
+      hotels: (json as List<dynamic>).map((dynamic e) => Hotel.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 }

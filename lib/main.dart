@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_app/resources/app_colors.dart';
+import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
 import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
 
@@ -16,6 +19,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        inputDecorationTheme: const InputDecorationTheme(
+          // enabledBorder: InputBorder.none,
+          filled: true,
+          fillColor: AppColors.formBackgroundColor,
+          outlineBorder: BorderSide(color: AppColors.formBackgroundColor, style: BorderStyle.solid),
+        ),
         fontFamily: 'SF Pro Display',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -24,7 +33,6 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         )
       ),
-      // home: const HotelWidget(),
       home: const HotelWidget(),
     );
   }

@@ -7,6 +7,8 @@ import 'package:hotel_app/domain/entity/room.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
+import 'package:hotel_app/ui/components/headline_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
@@ -45,7 +47,7 @@ class _RoomWidgetState extends State<RoomWidget> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Image.asset(AppImages.backwardArrow),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -131,10 +133,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              roomList.rooms[index].name,
-                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                            ),
+                            HeadlineTextWidget(text: roomList.rooms[index].name),
                             Text(
                               peculiarities,
                               style: const TextStyle(
@@ -217,7 +216,9 @@ class _RoomWidgetState extends State<RoomWidget> {
                                       'К выбору номера',
                                       style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
+                                    },
                                   ),
                                 ),
                               ),
