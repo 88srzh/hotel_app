@@ -5,6 +5,7 @@ import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -474,36 +475,14 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ),
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              width: double.infinity,
-              height: 88,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Center(
-                  child: SizedBox(
-                    width: 343,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                        backgroundColor: AppColors.hotelBottomButtonColor,
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        'Оплатить $payable ₽',
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        text: 'Оплатить $payable ₽',
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+        },
       ),
     );
   }

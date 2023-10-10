@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 
 class OrderPaidWidget extends StatelessWidget {
   const OrderPaidWidget({super.key});
@@ -39,26 +40,7 @@ class OrderPaidWidget extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 27.0,horizontal: 16.0),
-        child: SizedBox(
-          height: 60,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-              backgroundColor: AppColors.hotelBottomButtonColor,
-              elevation: 0,
-            ),
-            onPressed: () {},
-            child: const Center(
-              child: Text(
-                'Супер!',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(text: 'Супер', onPressed: () {}),
     );
   }
 }
