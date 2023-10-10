@@ -3,6 +3,7 @@ import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
+import 'package:hotel_app/ui/widgets/Hotel/hotel_widget.dart';
 
 class OrderPaidWidget extends StatelessWidget {
   const OrderPaidWidget({super.key});
@@ -41,8 +42,12 @@ class OrderPaidWidget extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(text: 'Супер', onPressed: () {}),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        text: 'Супер',
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const HotelWidget()));
+        },
+      ),
     );
   }
 }
-
