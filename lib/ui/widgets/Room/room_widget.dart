@@ -6,6 +6,7 @@ import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/room.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
@@ -40,19 +41,7 @@ class _RoomWidgetState extends State<RoomWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Steigenberger Makadi',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-        leading: IconButton(
-          icon: Image.asset(AppImages.backwardArrow),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: const CustomAppBarWidget(title: 'Steigenberger Makadi'),
       body: Container(
         decoration: const BoxDecoration(
           color: Colors.white,

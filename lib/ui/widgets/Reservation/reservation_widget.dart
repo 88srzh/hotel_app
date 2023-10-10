@@ -5,6 +5,7 @@ import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
@@ -75,19 +76,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
     return Scaffold(
       // TODO add to separate widget
-      appBar: AppBar(
-        title: const Text(
-          'Бронирование',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Image.asset(AppImages.backwardArrow),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar:  const CustomAppBarWidget(title: 'Бронирование'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
@@ -482,6 +471,29 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         text: 'Оплатить $payable ₽',
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+        },
+      ),
+    );
+  }
+}
+
+class CustomAppBarWithNavigatorPop extends StatelessWidget {
+  const CustomAppBarWithNavigatorPop({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text(
+        'Бронирование',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: Image.asset(AppImages.backwardArrow),
+        onPressed: () {
+          Navigator.pop(context);
         },
       ),
     );

@@ -67,6 +67,7 @@ class _HotelWidgetState extends State<HotelWidget> {
           ),
         ),
         centerTitle: true,
+        scrolledUnderElevation: 0,
       ),
       body: ListView(
         children: [
