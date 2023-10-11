@@ -11,6 +11,7 @@ import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key});
@@ -87,6 +88,12 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final String fuelCharge = reservation.fuelCharge.toString();
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
+
+    var maskFormatter = MaskTextInputFormatter(
+      mask: '* (***) ***-**-**',
+      filter: {"*": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy,
+    );
 
     return Scaffold(
       // TODO add to separate widget
@@ -223,9 +230,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      _mobileFormatter,
+                      maskFormatter,
+                      // _mobileFormatter,
                     ],
-                    maxLength: 15,
+                    maxLength: 17,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
@@ -589,9 +597,9 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
         selectionIndex++;
       }
     }
-      if (newTextLength >= usedSubstringIndex) {
-        newText.write(newValue.text.substring(usedSubstringIndex));
-      }
+    if (newTextLength >= usedSubstringIndex) {
+      newText.write(newValue.text.substring(usedSubstringIndex));
+    }
     return TextEditingValue(
       text: newText.toString(),
       selection: TextSelection.collapsed(offset: newText.length),
