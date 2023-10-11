@@ -225,7 +225,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       FilteringTextInputFormatter.digitsOnly,
                       _mobileFormatter,
                     ],
-                    maxLength: 13,
+                    maxLength: 15,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
@@ -562,30 +562,36 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
     if (newTextLength >= 2) {
       newText.write('${newValue.text.substring(0, usedSubstringIndex = 1)}-');
       if (newValue.selection.end >= 2) {
-        selectionIndex += 2;
+        selectionIndex += 1;
       }
     }
     if (newTextLength >= 5) {
-      newText.write('${newValue.text.substring(0, usedSubstringIndex = 4)}-');
-      if (newValue.selection.end >= 4) {
-        selectionIndex += 2;
-      }
-    }
-    if (newTextLength >= 7) {
-      newText.write(newValue.text.substring(4, usedSubstringIndex = 7));
-      if (newValue.selection.end >= 7) {
+      newText.write('${newValue.text.substring(1, usedSubstringIndex = 4)}-');
+      if (newValue.selection.end >= 5) {
         selectionIndex++;
       }
     }
     if (newTextLength >= 8) {
-      newText.write('-${newValue.text.substring(7, usedSubstringIndex = 8)}');
-      if (newValue.selection.end >= 11) {
+      newText.write('${newValue.text.substring(4, usedSubstringIndex = 7)}-');
+      if (newValue.selection.end >= 8) {
         selectionIndex++;
       }
     }
-    if (newTextLength >= usedSubstringIndex) {
-      newText.write(newValue.text.substring(usedSubstringIndex));
+    if (newTextLength >= 9) {
+      newText.write('${newValue.text.substring(7, usedSubstringIndex = 9)}-');
+      if (newValue.selection.end >= 9) {
+        selectionIndex++;
+      }
     }
+    if (newTextLength >= 12) {
+      newText.write(newValue.text.substring(9, usedSubstringIndex = 11));
+      if (newValue.selection.end >= 12) {
+        selectionIndex++;
+      }
+    }
+      if (newTextLength >= usedSubstringIndex) {
+        newText.write(newValue.text.substring(usedSubstringIndex));
+      }
     return TextEditingValue(
       text: newText.toString(),
       selection: TextSelection.collapsed(offset: newText.length),
