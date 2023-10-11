@@ -154,7 +154,7 @@ class _HotelWidgetState extends State<HotelWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          FiveStarRowWidget(hotel: hotel),
+                          FiveStarRowWidget(rating: hotel.rating.toString(), ratingName: hotel.ratingName),
                           const HeadlineTextWidget(text: 'Steigenberger Makadi'),
                           Text(
                             hotel.adress,
@@ -238,4 +238,3 @@ class _HotelWidgetState extends State<HotelWidget> {
     return texts.join(' ');
   }
 }
-

@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotel_app/domain/api_client/network_client.dart';
+import 'package:hotel_app/domain/entity/about_the_hotel.dart';
+import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
 import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
+import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -115,31 +118,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   children: [
                     const SizedBox(height: 10.0),
                     // TODO add to separate widget
-                    Container(
-                      height: 29.0,
-                      width: 153.0,
-                      decoration: const BoxDecoration(
-                        color: AppColors.orangeBackground,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.star, color: AppColors.orangeText, size: 15),
-                            Text(
-                              reservation.horating.toString(),
-                              // TODO add to separate widget
-                              style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(width: 5.0),
-                            Text(
-                              reservation.ratingName,
-                              style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    FiveStarRowWidget(rating: reservation.horating.toString(), ratingName: reservation.ratingName),
                     const SizedBox(height: 10.0),
                     const HeadlineTextWidget(text: 'Steigenberger Makadi'),
                     Text(

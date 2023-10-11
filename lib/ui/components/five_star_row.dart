@@ -4,10 +4,12 @@ import 'package:hotel_app/resources/app_colors.dart';
 class FiveStarRowWidget extends StatelessWidget {
   const FiveStarRowWidget({
     super.key,
-    required this.hotel,
+    required this.rating,
+    required this.ratingName,
   });
 
-  final Hotel hotel;
+  final String rating;
+  final String ratingName;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,12 @@ class FiveStarRowWidget extends StatelessWidget {
           children: [
             const Icon(Icons.star, color: AppColors.orangeText, size: 15),
             Text(
-              hotel.rating.toString(),
+              rating,
               style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 5.0),
             Text(
-              hotel.ratingName,
+              ratingName,
               style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
