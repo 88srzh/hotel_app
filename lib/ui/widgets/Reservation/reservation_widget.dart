@@ -266,113 +266,118 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 color: Colors.white,
               ),
-              child: Column(
+              child: ExpansionTile(
+                title: Text('Первый турист'),
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
                     children: [
-                      const HeadlineTextWidget(text: 'Первый турист'),
-                      Image.asset(AppImages.upArrow),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const HeadlineTextWidget(text: 'Первый турист'),
+                          Image.asset(AppImages.upArrow),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
+                      TextFormField(
+                        controller: nameController,
+                        key: nameKey,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Имя';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          name = value;
+                        },
+                        keyboardType: TextInputType.name,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        decoration: textFormFieldDecorationWidget('Имя'),
+                      ),
+                      const SizedBox(height: 10.0),
+                      TextFormField(
+                        key: surnameKey,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Фамилия';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        keyboardType: TextInputType.name,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        decoration: textFormFieldDecorationWidget('Фамилия'),
+                      ),
+                      const SizedBox(height: 10.0),
+                      TextFormField(
+                        key: birthdayKey,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Дата рождения';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        keyboardType: TextInputType.datetime,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        decoration: textFormFieldDecorationWidget('Дата рождения'),
+                      ),
+                      const SizedBox(height: 10.0),
+                      TextFormField(
+                        key: citizenshipKey,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Гражданство';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        keyboardType: TextInputType.text,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        decoration: textFormFieldDecorationWidget('Гражданство'),
+                      ),
+                      const SizedBox(height: 10.0),
+                      TextFormField(
+                        key: passportNumberKey,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Номер паспорта';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        decoration: textFormFieldDecorationWidget('Номер паспорта'),
+                      ),
+                      const SizedBox(height: 10.0),
+                      TextFormField(
+                        key: passportValidityPeriodKey,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Срок действия загранпаспорта';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        keyboardType: TextInputType.text,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                        decoration: textFormFieldDecorationWidget('Срок действия загранпаспорта'),
+                      ),
+                      const SizedBox(height: 10.0),
                     ],
                   ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    controller: nameController,
-                    key: nameKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Имя';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      name = value;
-                    },
-                    keyboardType: TextInputType.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: textFormFieldDecorationWidget('Имя'),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: surnameKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Фамилия';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: textFormFieldDecorationWidget('Фамилия'),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: birthdayKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Дата рождения';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.datetime,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: textFormFieldDecorationWidget('Дата рождения'),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: citizenshipKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Гражданство';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: textFormFieldDecorationWidget('Гражданство'),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: passportNumberKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Номер паспорта';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: textFormFieldDecorationWidget('Номер паспорта'),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: passportValidityPeriodKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Срок действия загранпаспорта';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: textFormFieldDecorationWidget('Срок действия загранпаспорта'),
-                  ),
-                  const SizedBox(height: 10.0),
                 ],
               ),
             ),
