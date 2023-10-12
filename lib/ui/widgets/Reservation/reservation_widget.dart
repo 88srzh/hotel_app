@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotel_app/domain/api_client/network_client.dart';
-import 'package:hotel_app/domain/entity/about_the_hotel.dart';
-import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
@@ -13,7 +11,6 @@ import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
@@ -97,6 +94,19 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       filter: {"*": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
     );
+
+    String? validateEmail(String? value) {
+      const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
+          r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
+          r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
+          r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
+          r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
+          r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
+          r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
+      final regex = RegExp(pattern);
+
+      return value!.isNotEmpty && !regex.hasMatch(value) ? 'Enter a valid email address' : null;
+    }
 
     return Scaffold(
       // TODO add to separate widget
@@ -225,13 +235,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
                     key: emailFormKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Введите текст';
-                      }
-                      return null;
-                    },
+                    validator: validateEmail,
                     onChanged: (value) {
                       email = value;
                     },
