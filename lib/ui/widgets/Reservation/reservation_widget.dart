@@ -89,6 +89,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
 
+    bool customTileExpanded = true;
+
     var maskFormatter = MaskTextInputFormatter(
       mask: '* (***) ***-**-**',
       filter: {"*": RegExp(r'[0-9]')},
@@ -109,7 +111,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     }
 
     return Scaffold(
-      // TODO add to separate widget
       appBar: const CustomAppBarWidget(title: 'Бронирование'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -267,18 +268,20 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 color: Colors.white,
               ),
               child: ExpansionTile(
-                title: Text('Первый турист'),
+                onExpansionChanged: (bool expanded) {
+                  setState(() {
+                    customTileExpanded = expanded;
+                  });
+                },
+                trailing: customTileExpanded ? Image.asset(AppImages.downArrow) : Image.asset(AppImages.upArrow),
+                tilePadding: const EdgeInsets.all(0),
+                title: const Text(
+                  'Первый турист',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                ),
                 children: [
                   Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const HeadlineTextWidget(text: 'Первый турист'),
-                          Image.asset(AppImages.upArrow),
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
                       TextFormField(
                         controller: nameController,
                         key: nameKey,
