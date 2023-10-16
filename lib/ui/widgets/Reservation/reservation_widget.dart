@@ -271,126 +271,21 @@ class _ReservationWidgetState extends State<ReservationWidget> {
               borderRadius: BorderRadius.all(Radius.circular(12)),
               color: Colors.white,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ExpansionTile(
-                backgroundColor: Colors.transparent,
-                shape: const Border(),
-                onExpansionChanged: (bool expanded) {
-                  setState(() {
-                    customTileExpanded = expanded;
-                  });
-                },
-                trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
-                tilePadding: const EdgeInsets.all(0),
-                title: const Text(
-                  'Первый турист',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                ),
-                children: [
-                  Column(
-                    children: [
-                      TextFormField(
-                        controller: nameController,
-                        key: nameKey,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Имя';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          name = value;
-                        },
-                        keyboardType: TextInputType.name,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('Имя'),
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextFormField(
-                        key: surnameKey,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Фамилия';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        keyboardType: TextInputType.name,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('Фамилия'),
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextFormField(
-                        key: birthdayKey,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Дата рождения';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        keyboardType: TextInputType.datetime,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('Дата рождения'),
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextFormField(
-                        key: citizenshipKey,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Гражданство';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        keyboardType: TextInputType.text,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('Гражданство'),
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextFormField(
-                        key: passportNumberKey,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Номер паспорта';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        keyboardType: TextInputType.number,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('Номер паспорта'),
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextFormField(
-                        key: passportValidityPeriodKey,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Срок действия загранпаспорта';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        keyboardType: TextInputType.text,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('Срок действия загранпаспорта'),
-                      ),
-                      const SizedBox(height: 10.0),
-                    ],
-                  ),
-                ],
-              ),
+            child: touristExpansionTile(
+              // someColumn,
+              // nameController,
+              // nameKey,
+              '',
+              '',
+              '',
+              '',
+              // surnameKey,
+              '',
+              '',
+              // birthdayKey,
+              // citizenshipKey,
+              // passportNumberKey,
+              // passportValidityPeriodKey,
             ),
           ),
           const SizedBox(height: 10.0),
@@ -411,19 +306,24 @@ class _ReservationWidgetState extends State<ReservationWidget> {
             ),
           ),
           const SizedBox(height: 10.0),
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              color: Colors.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const HeadlineTextWidget(text: 'Добавить туриста'),
-                  Image.asset(AppImages.addArrow),
-                ],
+          InkWell(
+            onTap: () {
+              setState(() {});
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const HeadlineTextWidget(text: 'Добавить туриста'),
+                    Image.asset(AppImages.addArrow),
+                  ],
+                ),
               ),
             ),
           ),
@@ -457,6 +357,176 @@ class _ReservationWidgetState extends State<ReservationWidget> {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
         },
       ),
+    );
+  }
+
+  Padding touristExpansionTile(
+      // Column someColumn,
+      // TextEditingController nameController,
+      // GlobalKey<FormState> nameKey,
+      String name,
+      // GlobalKey<FormState> surnameKey,
+      String surname,
+      String birthday,
+      String citizenship,
+      String passwordNumber,
+      String passportValidityPeriod) {
+    // GlobalKey<FormState> birthdayKey,
+    // GlobalKey<FormState> citizenshipKey,
+    // GlobalKey<FormState> passportNumberKey,
+    // GlobalKey<FormState> passportValidityPeriodKey) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: firstTourist(
+        // nameController,
+        // nameKey,
+        name,
+        surname,
+        birthday,
+        citizenship,
+        passwordNumber,
+        passportValidityPeriod,
+        // surnameKey,
+        // birthdayKey,
+        // citizenshipKey,
+        // passportNumberKey,
+        // passportValidityPeriodKey,
+      ),
+    );
+  }
+
+  ExpansionTile firstTourist(
+    // TextEditingController nameController,
+    // GlobalKey<FormState> nameKey,
+    String name,
+    String surname,
+    String birthday,
+    String citizenship,
+    String passwordNumber,
+    String passwordValidityPeriod,
+    // GlobalKey<FormState> surnameKey,
+    // GlobalKey<FormState> birthdayKey,
+    // GlobalKey<FormState> citizenshipKey,
+    // GlobalKey<FormState> passportNumberKey,
+    // GlobalKey<FormState> passportValidityPeriodKey,
+  ) {
+    return ExpansionTile(
+      backgroundColor: Colors.transparent,
+      shape: const Border(),
+      onExpansionChanged: (bool expanded) {
+        setState(() {
+          customTileExpanded = expanded;
+        });
+      },
+      trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
+      tilePadding: const EdgeInsets.all(0),
+      title: const Text(
+        'Первый турист',
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+      ),
+      children: [
+        Column(
+          children: [
+            TextFormField(
+              // controller: nameController,
+              // key: nameKey,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Имя';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                name = value;
+              },
+              keyboardType: TextInputType.name,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: textFormFieldDecorationWidget('Имя'),
+            ),
+            const SizedBox(height: 10.0),
+            TextFormField(
+              // key: surnameKey,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Фамилия';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                surname = value;
+              },
+              keyboardType: TextInputType.name,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: textFormFieldDecorationWidget('Фамилия'),
+            ),
+            const SizedBox(height: 10.0),
+            TextFormField(
+              // key: birthdayKey,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Дата рождения';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                birthday = value;
+              },
+              keyboardType: TextInputType.datetime,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: textFormFieldDecorationWidget('Дата рождения'),
+            ),
+            const SizedBox(height: 10.0),
+            TextFormField(
+              // key: citizenshipKey,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Гражданство';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                citizenship = value;
+              },
+              keyboardType: TextInputType.text,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: textFormFieldDecorationWidget('Гражданство'),
+            ),
+            const SizedBox(height: 10.0),
+            TextFormField(
+              // key: passportNumberKey,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Номер паспорта';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                passwordNumber = value;
+              },
+              keyboardType: TextInputType.number,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: textFormFieldDecorationWidget('Номер паспорта'),
+            ),
+            const SizedBox(height: 10.0),
+            TextFormField(
+              // key: passportValidityPeriodKey,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Срок действия загранпаспорта';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                passwordValidityPeriod = value;
+              },
+              keyboardType: TextInputType.text,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: textFormFieldDecorationWidget('Срок действия загранпаспорта'),
+            ),
+            const SizedBox(height: 10.0),
+          ],
+        ),
+      ],
     );
   }
 
@@ -605,5 +675,21 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
       text: newText.toString(),
       selection: TextSelection.collapsed(offset: newText.length),
     );
+  }
+}
+
+class TouristExpansionTile extends StatefulWidget {
+  const TouristExpansionTile({super.key});
+
+  @override
+  State<TouristExpansionTile> createState() => _TouristExpansionTileState();
+}
+
+class _TouristExpansionTileState extends State<TouristExpansionTile> {
+  final List<Map<String, dynamic>> _texts = List.generate(10, (index) => {});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
