@@ -55,6 +55,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   }
 
   bool customTileExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     final _mobileFormatter = PhoneNumberTextInputFormatter();
@@ -90,7 +91,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
 
-
     var maskFormatter = MaskTextInputFormatter(
       mask: '* (***) ***-**-**',
       filter: {"*": RegExp(r'[0-9]')},
@@ -112,41 +112,41 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
     return Scaffold(
       appBar: const CustomAppBarWidget(title: 'Бронирование'),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            Container(
-              height: 120.0,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10.0),
-                    // TODO add to separate widget
-                    FiveStarRowWidget(rating: reservation.horating.toString(), ratingName: reservation.ratingName),
-                    const SizedBox(height: 10.0),
-                    const HeadlineTextWidget(text: 'Steigenberger Makadi'),
-                    Text(
-                      reservation.hotelAdress,
-                      style: const TextStyle(fontSize: 14, color: AppColors.blueText),
-                    ),
-                  ],
-                ),
+      body: ListView(
+        children: [
+          Container(
+            height: 120.0,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10.0),
+                  // TODO add to separate widget
+                  FiveStarRowWidget(rating: reservation.horating.toString(), ratingName: reservation.ratingName),
+                  const SizedBox(height: 10.0),
+                  const HeadlineTextWidget(text: 'Steigenberger Makadi'),
+                  Text(
+                    reservation.hotelAdress,
+                    style: const TextStyle(fontSize: 14, color: AppColors.blueText),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
-              height: 280.0,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            height: 280.0,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   Row(
@@ -202,12 +202,15 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
-            // information about customer
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
+          ),
+          // information about customer
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -260,14 +263,19 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
-            // first customer
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
+          ),
+          // first customer
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ExpansionTile(
+                backgroundColor: Colors.transparent,
+                shape: const Border(),
                 onExpansionChanged: (bool expanded) {
                   setState(() {
                     customTileExpanded = expanded;
@@ -384,64 +392,64 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const HeadlineTextWidget(text: 'Второй турист'),
-                    Image.asset(AppImages.downArrow),
-                  ],
-                ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const HeadlineTextWidget(text: 'Второй турист'),
+                  Image.asset(AppImages.downArrow),
+                ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const HeadlineTextWidget(text: 'Добавить туриста'),
-                    Image.asset(AppImages.addArrow),
-                  ],
-                ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const HeadlineTextWidget(text: 'Добавить туриста'),
+                  Image.asset(AppImages.addArrow),
+                ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
-                  children: [
-                    ReservationTourPrices(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽'),
-                    const SizedBox(height: 10.0),
-                    ReservationTourPrices(header: 'Топливный сбор', amount: '$fuelCharge ₽'),
-                    const SizedBox(height: 10.0),
-                    ReservationTourPrices(header: 'Сервисный сбор', amount: '$serviceCharge ₽'),
-                    const SizedBox(height: 10.0),
-                    ReservationTourPrices(header: 'К оплате', amount: '$payable ₽'),
-                    const SizedBox(height: 10.0),
-                  ],
-                ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: Column(
+                children: [
+                  ReservationTourPrices(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽'),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPrices(header: 'Топливный сбор', amount: '$fuelCharge ₽'),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPrices(header: 'Сервисный сбор', amount: '$serviceCharge ₽'),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPrices(header: 'К оплате', amount: '$payable ₽'),
+                  const SizedBox(height: 10.0),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         text: 'Оплатить $payable ₽',
