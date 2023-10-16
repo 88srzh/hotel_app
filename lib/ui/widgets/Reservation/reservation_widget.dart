@@ -54,6 +54,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     getReservationData();
   }
 
+  bool customTileExpanded = false;
   @override
   Widget build(BuildContext context) {
     final _mobileFormatter = PhoneNumberTextInputFormatter();
@@ -89,7 +90,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
 
-    bool customTileExpanded = true;
 
     var maskFormatter = MaskTextInputFormatter(
       mask: '* (***) ***-**-**',
@@ -273,7 +273,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     customTileExpanded = expanded;
                   });
                 },
-                trailing: customTileExpanded ? Image.asset(AppImages.downArrow) : Image.asset(AppImages.upArrow),
+                trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
                 tilePadding: const EdgeInsets.all(0),
                 title: const Text(
                   'Первый турист',
