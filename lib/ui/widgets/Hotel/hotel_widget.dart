@@ -220,7 +220,7 @@ class _HotelWidgetState extends State<HotelWidget> {
       width: _currentPhoto == index ? 7 : 7,
       decoration: BoxDecoration(
         // refactoring color
-        color: _currentPhoto == index ? Colors.black : Colors.grey,
+        color: _currentPhoto == index ? Colors.black : _currentPhoto > 1 ? Colors.grey : Colors.grey[300],
         borderRadius: BorderRadius.circular(100),
       ),
     );
