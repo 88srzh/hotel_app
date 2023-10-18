@@ -59,14 +59,26 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   TextEditingController nameController = TextEditingController();
   final List<Widget> expansionTileWidget = <Widget>[];
   final List<void> expansionTile = <void>[];
-  final List<String> names = <String>['Первый турист', 'Второй турист'];
-  // List<String> afterTwoNames = <String>['Третий турист', 'Четвертый турист', 'Пятый турист'];
-  List<dynamic> afterTwoNames = <dynamic>['Третий турист', 'Четвертый турист', 'Пятый турист'];
+  final List<String> names = <String>['Первый турист'];
+
+  List<dynamic> listOfTourists = <dynamic>[
+    'Первый турист',
+    'Второй турист',
+    'Третий турист',
+    'Четвертый турист',
+    'Пятый турист',
+    'Шестой турист',
+    'Седьмой турист',
+    'Восьмой турист',
+    'Девятый турист',
+    'Десятый турист'
+  ];
+
   // List<dynamic> dynamicValue = List<dynamic>.from(afterTwoNames);
 
   void addTourist() {
     setState(() {
-        names.insert(2, afterTwoNames[1]);
+      names.insert(2, listOfTourists[1]);
     });
   }
 
@@ -283,23 +295,23 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
                     tilePadding: const EdgeInsets.all(0),
                     title: Text(
-                      names[index],
+                      listOfTourists[index],
                       style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                     ),
                     children: [
                       Column(
                         children: [
-                          customTouristTextFormField('Имя', nameController),
+                          customTouristTextFormField('Имя', 'Имя', Keys.nameKey),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Фамилия', nameController),
+                          customTouristTextFormField('Фамилия', 'Фамилия', Keys.surnameKey),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Дата рождения', nameController),
+                          customTouristTextFormField('Дата рождения', 'Дата рождения', Keys.birthdayKey),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Гражданство', nameController),
+                          customTouristTextFormField('Гражданство', 'Гражданство', Keys.citizenshipKey),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Номер паспорта', nameController),
+                          customTouristTextFormField('Номер паспорта', 'Номер паспорта', Keys.passportNumber),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Срок действия загранпаспорта', nameController),
+                          customTouristTextFormField('Срок действия загранпаспорта', 'Срок действия загранпаспорта', Keys.passportValidityPeriod),
                           const SizedBox(height: 10.0),
                         ],
                       ),
@@ -358,35 +370,44 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       bottomNavigationBar: CustomBottomNavigationBar(
         text: 'Оплатить $payable ₽',
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+          if (Keys.nameKey.currentState == null &&
+              Keys.surnameKey.currentState == null &&
+              Keys.birthdayKey.currentState == null &&
+              Keys.citizenshipKey.currentState == null &&
+              Keys.passportNumber.currentState == null &&
+              Keys.passportValidityPeriod.currentState == null) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+          }
         },
       ),
     );
   }
 
-  TextFormField customTouristTextFormField(String name, TextEditingController? nameController) {
+  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key) {
     return TextFormField(
-      controller: nameController,
-      // key: nameKey,
+      // controller: nameController,
+      key: key,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Имя';
+          return 'Поле не заполнено';
         }
         return null;
       },
       onChanged: (value) {
-        name = value;
+        validate = value;
       },
       keyboardType: TextInputType.name,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget('Имя'),
+      decoration: textFormFieldDecorationWidget(textFormField),
     );
   }
 }
 
 InputDecoration textFormFieldDecorationWidget(String text) {
   return InputDecoration(
-    errorText: 'Поле обязательно для заполнения',
+    // errorText: 'Поле обязательно для заполнения',
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       borderSide: BorderSide(color: Colors.transparent),
@@ -394,29 +415,6 @@ InputDecoration textFormFieldDecorationWidget(String text) {
     labelText: text,
     labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
   );
-}
-
-class CustomAppBarWithNavigatorPop extends StatelessWidget {
-  const CustomAppBarWithNavigatorPop({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'Бронирование',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-      ),
-      centerTitle: true,
-      leading: IconButton(
-        icon: Image.asset(AppImages.backwardArrow),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
 }
 
 class ReservationTourPrices extends StatelessWidget {
@@ -545,4 +543,13 @@ class _TouristExpansionTileState extends State<TouristExpansionTile> {
   Widget build(BuildContext context) {
     return const Placeholder();
   }
+}
+
+class Keys {
+  static final nameKey = GlobalKey<FormState>();
+  static final surnameKey = GlobalKey<FormState>();
+  static final birthdayKey = GlobalKey<FormState>();
+  static final citizenshipKey = GlobalKey<FormState>();
+  static final passportNumber = GlobalKey<FormState>();
+  static final passportValidityPeriod = GlobalKey<FormState>();
 }
