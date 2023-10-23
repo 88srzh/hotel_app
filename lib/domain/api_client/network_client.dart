@@ -34,7 +34,7 @@ Future<String> getNetworkDataForRoom() async {
 }
 
 Future<String> getNetworkDataFromReservation() async {
-  final network = Network('https://run.mocky.io/v3/e8868481-743f-4eb2-a0d7-2bc4012275c8');
+  final network = Network('https://run.mocky.io/v3/96cf7c34-472a-47e1-acca-2c4f007b48be');
   final networkData = await network.getData();
   return networkData;
 }
