@@ -36,7 +36,6 @@ class _HotelWidgetState extends State<HotelWidget> {
 
   void getHotelData() async {
     final hotelJson = await getNetworkDataForHotel();
-    // print(hotelJson);
     final dynamic hotelMap = json.decode(hotelJson);
 
     setState(() {

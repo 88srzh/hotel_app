@@ -107,12 +107,23 @@ class _RoomWidgetState extends State<RoomWidget> {
                               bottom: 10,
                               child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    3,
-                                    (index) => buildDot(index: index),
-                                    growable: false,
+                                child: Container(
+                                  height: 17.0,
+                                  width: 75.0,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: List.generate(
+                                        3,
+                                        (index) => buildDot(index: index),
+                                        growable: false,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -225,12 +236,6 @@ class _RoomWidgetState extends State<RoomWidget> {
           },
         ),
       ),
-      // bottomNavigationBar: CustomBottomNavigationBar(
-      //   text: 'К выбору номера',
-      //   onPressed: () {
-      //     Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
-      //   },
-      // ),
     );
   }
 
@@ -238,13 +243,13 @@ class _RoomWidgetState extends State<RoomWidget> {
   AnimatedContainer buildDot({int? index}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.only(right: 5.0),
+      margin: const EdgeInsets.only(right: 4.0),
       height: 6,
-      width: _currentPhoto == index ? 10 : 6,
+      width: _currentPhoto == index ? 7 : 7,
       decoration: BoxDecoration(
         // refactoring color
-        color: _currentPhoto == index ? Colors.white : Colors.black,
-        borderRadius: BorderRadius.circular(3),
+        color: _currentPhoto == index ? Colors.black : _currentPhoto > 1 ? Colors.grey : Colors.grey[300],
+        borderRadius: BorderRadius.circular(100),
       ),
     );
   }
