@@ -28,7 +28,7 @@ Future<String> getNetworkDataForHotel() async {
 }
 
 Future<String> getNetworkDataForRoom() async {
-  final network = Network('https://run.mocky.io/v3/f9a38183-6f95-43aa-853a-9c83cbb05ecd');
+  final network = Network('https://run.mocky.io/v3/95c46903-c93f-41f5-8d7e-c1a6e5b649ea');
   final networkData = await network.getData();
   return networkData;
 }
