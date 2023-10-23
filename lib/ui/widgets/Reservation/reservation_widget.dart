@@ -74,8 +74,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     'Десятый турист'
   ];
 
-  // List<dynamic> dynamicValue = List<dynamic>.from(afterTwoNames);
-
   void addTourist() {
     setState(() {
       names.insert(2, listOfTourists[1]);
@@ -85,6 +83,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   @override
   Widget build(BuildContext context) {
     final _mobileFormatter = PhoneNumberTextInputFormatter();
+    final _newMobileFormatter = NumberTextInputFormatter();
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
 
@@ -194,7 +193,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Номер'),
-                      ReservationBlackDataText(reservation: reservation.room),
+                      Expanded(child: ReservationBlackDataText(reservation: reservation.room)),
                     ],
                   ),
                   const SizedBox(height: 10.0),
@@ -224,12 +223,13 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   TextFormField(
                     key: phoneFormKey,
                     onChanged: (phone) {
-                      // print(phone.completeNumber);
+                      // print(phone.characters);
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      maskFormatter,
-                      // _mobileFormatter,
+                      // maskFormatter,
+                      _mobileFormatter,
+                      // _newMobileFormatter,
                     ],
                     maxLength: 17,
                     keyboardType: TextInputType.phone,
@@ -529,19 +529,49 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
   }
 }
 
-class TouristExpansionTile extends StatefulWidget {
-  const TouristExpansionTile({super.key});
-
+class NumberTextInputFormatter extends TextInputFormatter {
   @override
-  State<TouristExpansionTile> createState() => _TouristExpansionTileState();
-}
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final newTextLength = newValue.text.length;
+    int selectionIndex = newValue.selection.end;
+    int usedSubstringIndex = 1;
+    final newTextBuffer = StringBuffer();
 
-class _TouristExpansionTileState extends State<TouristExpansionTile> {
-  final List<Map<String, dynamic>> _texts = List.generate(10, (index) => {});
+    if (newTextLength >= 1) {
+      if (newValue.text.startsWith(RegExp(r'[789]'))) {
+        newTextBuffer.write('+7');
+        if (newValue.text.startsWith('9')) {
+          newTextBuffer.write('(9');
+          selectionIndex = 4;
+        }
+        if (newValue.selection.end >= 1) selectionIndex++;
+      }
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+    if (newTextLength >= 2) {
+      newTextBuffer.write('(${newValue.text.substring(1, usedSubstringIndex = 2)}');
+      if (newValue.selection.end >= 2) selectionIndex++;
+    }
+    if (newTextLength >= 5) {
+      newTextBuffer.write('${newValue.text.substring(usedSubstringIndex, usedSubstringIndex = 4)})');
+      if (newValue.selection.end >= 4) selectionIndex++;
+    }
+    if (newTextLength >= 8) {
+      newTextBuffer.write('${newValue.text.substring(usedSubstringIndex, usedSubstringIndex = 7)}-');
+      if (newValue.selection.end >= 7) selectionIndex++;
+    }
+    if (newTextLength >= 10) {
+      newTextBuffer.write('${newValue.text.substring(usedSubstringIndex, usedSubstringIndex = 9)}-');
+      if (newValue.selection.end >= 9) selectionIndex++;
+    }
+
+// Dump the rest.
+    if (newTextLength > usedSubstringIndex) newTextBuffer.write(newValue.text.substring(usedSubstringIndex, newTextLength));
+
+    return TextEditingValue(
+      text: newTextBuffer.toString(),
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
   }
 }
 
@@ -552,4 +582,14 @@ class Keys {
   static final citizenshipKey = GlobalKey<FormState>();
   static final passportNumber = GlobalKey<FormState>();
   static final passportValidityPeriod = GlobalKey<FormState>();
+}
+
+class ExampleMask {
+  final TextEditingController textController = TextEditingController();
+  final MaskTextInputFormatter formatter;
+  final FormFieldValidator<String>? validator;
+  final String hint;
+  final TextInputType textInputType;
+
+  ExampleMask({required this.formatter, this.validator, required this.hint, required this.textInputType});
 }
