@@ -22,7 +22,7 @@ class Network {
 }
 
 Future<String> getNetworkDataForHotel() async {
-  final network = Network('https://run.mocky.io/v3/307e8f41-bd45-4748-99ad-3fc01916a6b6');
+  final network = Network('https://run.mocky.io/v3/8b4eaeb3-2e53-4286-995d-df11fc6fc28f');
   final networkData = await network.getData();
   return networkData;
 }
