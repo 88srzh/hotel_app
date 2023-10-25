@@ -7,6 +7,7 @@ import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/build_dot_animated_container.dart';
 import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
@@ -139,7 +140,7 @@ class _HotelWidgetState extends State<HotelWidget> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: List.generate(
                                       5,
-                                      (index) => buildDot(index: index),
+                                      (index) => buildDot(index: index, currentPhoto: _currentPhoto),
                                       growable: false,
                                     ),
                                   ),
@@ -207,20 +208,6 @@ class _HotelWidgetState extends State<HotelWidget> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomWidget()));
         },
-      ),
-    );
-  }
-
-  AnimatedContainer buildDot({int? index}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.only(right: 4.0),
-      height: 6,
-      width: _currentPhoto == index ? 7 : 7,
-      decoration: BoxDecoration(
-        // refactoring color
-        color: _currentPhoto == index ? Colors.black : _currentPhoto > 1 ? Colors.grey : Colors.grey[300],
-        borderRadius: BorderRadius.circular(100),
       ),
     );
   }
