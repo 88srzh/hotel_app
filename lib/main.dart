@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/resources/app_colors.dart';
+import 'package:hotel_app/ui/components/extension_string_number_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
 
 void main() {

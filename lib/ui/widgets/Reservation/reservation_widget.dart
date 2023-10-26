@@ -11,6 +11,8 @@ import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
@@ -90,6 +92,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     // TODO need to fix to normal formula with formatter may be?
     final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
     final String endTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(3, 6);
+    final String tourPrice = reservation.tourPrice.toString();
+    final String tourPriceWithSeparate = tourPrice.substring(0, 4) + ' ' + tourPrice.substring(4, 6) + " " +tourPrice.substring(6, tourPrice.length);
     final String fuelCharge = reservation.fuelCharge.toString();
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
@@ -353,13 +357,15 @@ class _ReservationWidgetState extends State<ReservationWidget> {
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               child: Column(
                 children: [
-                  ReservationTourPrices(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽'),
+                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
-                  ReservationTourPrices(header: 'Топливный сбор', amount: '$fuelCharge ₽'),
+                  ReservationTourPricesTextWidget(header: 'Топливный сбор', amount: '$fuelCharge ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
-                  ReservationTourPrices(header: 'Сервисный сбор', amount: '$serviceCharge ₽'),
+                  ReservationTourPricesTextWidget(header: 'Сервисный сбор', amount: '$serviceCharge ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
-                  ReservationTourPrices(header: 'К оплате', amount: '$payable ₽'),
+                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$payable ₽', color: AppColors.roomDetailsTextColor),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$tourPriceWithSeparate ₽', color: AppColors.roomDetailsTextColor),
                   const SizedBox(height: 10.0),
                 ],
               ),
@@ -384,6 +390,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ),
     );
   }
+
 
   TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key) {
     return TextFormField(
@@ -417,33 +424,6 @@ InputDecoration textFormFieldDecorationWidget(String text) {
   );
 }
 
-class ReservationTourPrices extends StatelessWidget {
-  const ReservationTourPrices({
-    super.key,
-    required this.header,
-    required this.amount,
-  });
-
-  final String header;
-  final String amount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          header,
-          style: const TextStyle(fontSize: 16, color: AppColors.greyText, fontWeight: FontWeight.w400),
-        ),
-        Text(
-          amount,
-          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
-        )
-      ],
-    );
-  }
-}
 
 class ReservationBlackDataText extends StatelessWidget {
   const ReservationBlackDataText({
