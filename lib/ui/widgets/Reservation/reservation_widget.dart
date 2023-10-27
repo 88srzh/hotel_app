@@ -88,9 +88,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final phoneFormKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
-    final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
-    final String endTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(3, 6);
-    final String tourPrice = reservation.tourPrice.toString();
+    final String tourPrice = "${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}";
     final String fuelCharge = reservation.fuelCharge.toString();
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
@@ -354,7 +352,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               child: Column(
                 children: [
-                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽', color: Colors.black),
+                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$tourPrice ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
                   ReservationTourPricesTextWidget(header: 'Топливный сбор', amount: '$fuelCharge ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
