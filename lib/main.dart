@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/resources/app_colors.dart';
-import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
-import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
-import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
+import 'package:hotel_app/ui/components/extension_string_number_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/hotel_widget.dart';
 
 void main() {
@@ -12,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +28,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           color: Colors.white,
           centerTitle: true,
-        )
+        ),
       ),
       home: const HotelWidget(),
     );

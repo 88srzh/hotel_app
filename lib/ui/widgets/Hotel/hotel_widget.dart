@@ -7,7 +7,10 @@ import 'package:hotel_app/domain/entity/about_the_hotel.dart';
 import 'package:hotel_app/domain/entity/hotel.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
-import 'package:hotel_app/ui/components/LoadingIndicatorWidget.dart';
+import 'package:hotel_app/ui/components/build_dot_animated_container.dart';
+import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
+import 'package:hotel_app/ui/components/five_star_row.dart';
+import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Room/room_widget.dart';
 import 'package:hotel_app/ui/widgets/hotel/components/about_hotel_widget.dart';
@@ -33,8 +36,7 @@ class _HotelWidgetState extends State<HotelWidget> {
   );
 
   void getHotelData() async {
-    final hotelJson = await getNetworkData();
-    // print(hotelJson);
+    final hotelJson = await getNetworkDataForHotel();
     final dynamic hotelMap = json.decode(hotelJson);
 
     setState(() {
@@ -66,6 +68,7 @@ class _HotelWidgetState extends State<HotelWidget> {
           ),
         ),
         centerTitle: true,
+        scrolledUnderElevation: 0,
       ),
       body: ListView(
         children: [
@@ -124,12 +127,23 @@ class _HotelWidgetState extends State<HotelWidget> {
                             bottom: 10,
                             child: Align(
                               alignment: Alignment.bottomCenter,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                  3,
-                                  (index) => buildDot(index: index),
-                                  growable: false,
+                              child: Container(
+                                height: 17.0,
+                                width: 75.0,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(
+                                      5,
+                                      (index) => buildDot(index: index, currentPhoto: _currentPhoto),
+                                      growable: false,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -140,30 +154,7 @@ class _HotelWidgetState extends State<HotelWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            height: 29.0,
-                            width: 153.0,
-                            decoration: const BoxDecoration(
-                              color: AppColors.orangeBackground,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.star, color: AppColors.orangeText, size: 15),
-                                  Text(
-                                    hotel.rating.toString(),
-                                    style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(width: 5.0),
-                                  Text(
-                                    hotel.ratingName,
-                                    style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          FiveStarRowWidget(rating: hotel.rating.toString(), ratingName: hotel.ratingName),
                           const HeadlineTextWidget(text: 'Steigenberger Makadi'),
                           Text(
                             hotel.adress,
@@ -208,55 +199,15 @@ class _HotelWidgetState extends State<HotelWidget> {
               // about the hotel
               AboutHotelWidget(peculiarities: peculiarities, hotel: hotel),
               const SizedBox(height: 10.0),
-              // bottom button widget
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                width: double.infinity,
-                height: 88,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Center(
-                    child: SizedBox(
-                      width: 343,
-                      height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                          backgroundColor: AppColors.hotelBottomButtonColor,
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          'К выбору номера',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomWidget()));
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // const SelectionButtonWidget(),
             ],
           ),
         ],
       ),
-    );
-  }
-
-  AnimatedContainer buildDot({int? index}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.only(right: 5.0),
-      height: 6,
-      width: _currentPhoto == index ? 10 : 6,
-      decoration: BoxDecoration(
-        // refactoring color
-        color: _currentPhoto == index ? Colors.white : Colors.black,
-        borderRadius: BorderRadius.circular(3),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        text: 'К выбору номера',
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomWidget()));
+        },
       ),
     );
   }

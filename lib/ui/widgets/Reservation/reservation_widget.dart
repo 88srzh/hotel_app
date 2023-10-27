@@ -1,13 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hotel_app/domain/api_client/network_client.dart';
 import 'package:hotel_app/domain/entity/reservation.dart';
 import 'package:hotel_app/resources/app_colors.dart';
 import 'package:hotel_app/resources/resources.dart';
+import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
+import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
+import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key});
@@ -50,101 +55,103 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     getReservationData();
   }
 
+  bool customTileExpanded = false;
+
+  TextEditingController nameController = TextEditingController();
+  final List<Widget> expansionTileWidget = <Widget>[];
+  final List<void> expansionTile = <void>[];
+  final List<String> names = <String>['Первый турист'];
+
+  List<dynamic> listOfTourists = <dynamic>[
+    'Первый турист',
+    'Второй турист',
+    'Третий турист',
+    'Четвертый турист',
+    'Пятый турист',
+    'Шестой турист',
+    'Седьмой турист',
+    'Восьмой турист',
+    'Девятый турист',
+    'Десятый турист'
+  ];
+
+  void addTourist() {
+    setState(() {
+      names.insert(2, listOfTourists[1]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var phoneController = TextEditingController();
-    var emailController = TextEditingController();
-    String phone;
-    String email;
+    final mobileFormatter = PhoneNumberTextInputFormatter();
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
-    final nameKey = GlobalKey<FormState>();
-    final surnameKey = GlobalKey<FormState>();
-    final birthdayKey = GlobalKey<FormState>();
-    final citizenship = GlobalKey<FormState>();
-    final passportNumber = GlobalKey<FormState>();
-    final passportValidityPeriod = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
     final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
     final String endTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(3, 6);
+    final String tourPrice = reservation.tourPrice.toString();
     final String fuelCharge = reservation.fuelCharge.toString();
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
 
+    String email;
+
+    var maskFormatter = MaskTextInputFormatter(
+      mask: '* (***) ***-**-**',
+      filter: {"*": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy,
+    );
+
+    String? validateEmail(String? value) {
+      const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
+          r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
+          r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
+          r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
+          r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
+          r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
+          r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
+      final regex = RegExp(pattern);
+
+      return value!.isNotEmpty && !regex.hasMatch(value) ? 'Enter a valid email address' : null;
+    }
+
     return Scaffold(
-      // TODO add to separate widget
-      appBar: AppBar(
-        title: const Text(
-          'Бронирование',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Image.asset(AppImages.backwardArrow),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            Container(
-              height: 120.0,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10.0),
-                    // TODO add to separate widget
-                    Container(
-                      height: 29.0,
-                      width: 153.0,
-                      decoration: const BoxDecoration(
-                        color: AppColors.orangeBackground,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.star, color: AppColors.orangeText, size: 15),
-                            Text(
-                              reservation.horating.toString(),
-                              style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(width: 5.0),
-                            Text(
-                              reservation.ratingName,
-                              style: const TextStyle(color: AppColors.orangeText, fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10.0),
-                    const HeadlineTextWidget(text: 'Steigenberger Makadi'),
-                    Text(
-                      reservation.hotelAdress,
-                      style: const TextStyle(fontSize: 14, color: AppColors.blueText),
-                    ),
-                  ],
-                ),
+      appBar: const CustomAppBarWidget(title: 'Бронирование'),
+      body: ListView(
+        children: [
+          Container(
+            height: 120.0,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10.0),
+                  FiveStarRowWidget(rating: reservation.horating.toString(), ratingName: reservation.ratingName),
+                  const SizedBox(height: 10.0),
+                  const HeadlineTextWidget(text: 'Steigenberger Makadi'),
+                  Text(
+                    reservation.hotelAdress,
+                    style: const TextStyle(fontSize: 14, color: AppColors.blueText),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
-              height: 280.0,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            height: 280.0,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   Row(
@@ -187,7 +194,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   Row(
                     children: [
                       const ReservationGreyDataText(text: 'Номер'),
-                      ReservationBlackDataText(reservation: reservation.room),
+                      Expanded(child: ReservationBlackDataText(reservation: reservation.room)),
                     ],
                   ),
                   const SizedBox(height: 10.0),
@@ -200,26 +207,32 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
-            // information about customer
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
+          ),
+          // information about customer
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const HeadlineTextWidget(text: 'Информация о покупателе'),
                   const SizedBox(height: 10.0),
-                  IntlPhoneField(
+                  TextFormField(
                     key: phoneFormKey,
                     onChanged: (phone) {
-                      print(phone.completeNumber);
+                      // print(phone.characters);
                     },
-                    initialCountryCode: 'RU',
-                    showDropdownIcon: false,
-                    showCountryFlag: false,
-                    disableLengthCheck: true,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      // maskFormatter,
+                      mobileFormatter,
+                      // _newMobileFormatter,
+                    ],
+                    maxLength: 17,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
@@ -232,13 +245,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   ),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
                     key: emailFormKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Введите текст';
-                      }
-                      return null;
-                    },
+                    validator: validateEmail,
                     onChanged: (value) {
                       email = value;
                     },
@@ -260,189 +269,71 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ],
               ),
             ),
-            // first customer
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          // first customer
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                itemCount: names.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ExpansionTile(
+                    backgroundColor: Colors.transparent,
+                    shape: const Border(),
+                    onExpansionChanged: (bool expanded) {
+                      setState(() {
+                        customTileExpanded = expanded;
+                      });
+                    },
+                    trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
+                    tilePadding: const EdgeInsets.all(0),
+                    title: Text(
+                      listOfTourists[index],
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                    ),
                     children: [
-                      const HeadlineTextWidget(text: 'Первый турист'),
-                      Image.asset(AppImages.upArrow),
+                      Column(
+                        children: [
+                          customTouristTextFormField('Имя', 'Имя', Keys.nameKey),
+                          const SizedBox(height: 10.0),
+                          customTouristTextFormField('Фамилия', 'Фамилия', Keys.surnameKey),
+                          const SizedBox(height: 10.0),
+                          customTouristTextFormField('Дата рождения', 'Дата рождения', Keys.birthdayKey),
+                          const SizedBox(height: 10.0),
+                          customTouristTextFormField('Гражданство', 'Гражданство', Keys.citizenshipKey),
+                          const SizedBox(height: 10.0),
+                          customTouristTextFormField('Номер паспорта', 'Номер паспорта', Keys.passportNumber),
+                          const SizedBox(height: 10.0),
+                          customTouristTextFormField('Срок действия загранпаспорта', 'Срок действия загранпаспорта', Keys.passportValidityPeriod),
+                          const SizedBox(height: 10.0),
+                        ],
+                      ),
                     ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: nameKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Имя';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      labelText: 'Имя',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: surnameKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Фамилия';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Фамилия',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: birthdayKey,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Дата рождения';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.datetime,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Дата рождения',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: citizenship,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Гражданство';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Гражданство',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: passportNumber,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Номер паспорта';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Номер паспорта',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    key: passportValidityPeriod,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Срок действия загранпаспорта';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.formBackgroundColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Срок действия загранпаспорта',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                ],
+                  );
+                },
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
+          ),
+          const SizedBox(height: 10.0),
+          InkWell(
+            onTap: () {
+              addTourist();
+            },
+            child: Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 color: Colors.white,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const HeadlineTextWidget(text: 'Второй турист'),
-                    Image.asset(AppImages.downArrow),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -452,90 +343,82 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 ),
               ),
             ),
-            const SizedBox(height: 10.0),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
-                  children: [
-                    ReservationTourPrices(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽'),
-                    const SizedBox(height: 10.0),
-                    ReservationTourPrices(header: 'Топливный сбор', amount: '$fuelCharge ₽'),
-                    const SizedBox(height: 10.0),
-                    ReservationTourPrices(header: 'Сервисный сбор', amount: '$serviceCharge ₽'),
-                    const SizedBox(height: 10.0),
-                    ReservationTourPrices(header: 'К оплате', amount: '$payable ₽'),
-                    const SizedBox(height: 10.0),
-                  ],
-                ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+              child: Column(
+                children: [
+                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽', color: Colors.black),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPricesTextWidget(header: 'Топливный сбор', amount: '$fuelCharge ₽', color: Colors.black),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPricesTextWidget(header: 'Сервисный сбор', amount: '$serviceCharge ₽', color: Colors.black),
+                  const SizedBox(height: 10.0),
+                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$payable ₽', color: AppColors.roomDetailsTextColor),
+                  const SizedBox(height: 10.0),
+                ],
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              width: double.infinity,
-              height: 88,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Center(
-                  child: SizedBox(
-                    width: 343,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                        backgroundColor: AppColors.hotelBottomButtonColor,
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        'Оплатить $payable ₽',
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        text: 'Оплатить $payable ₽',
+        onPressed: () {
+          if (Keys.nameKey.currentState == null &&
+              Keys.surnameKey.currentState == null &&
+              Keys.birthdayKey.currentState == null &&
+              Keys.citizenshipKey.currentState == null &&
+              Keys.passportNumber.currentState == null &&
+              Keys.passportValidityPeriod.currentState == null) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+          }
+        },
       ),
     );
   }
-}
 
-class ReservationTourPrices extends StatelessWidget {
-  const ReservationTourPrices({
-    super.key,
-    required this.header,
-    required this.amount,
-  });
 
-  final String header;
-  final String amount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          header,
-          style: const TextStyle(fontSize: 16, color: AppColors.greyText, fontWeight: FontWeight.w400),
-        ),
-        Text(
-          amount,
-          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
-        )
-      ],
+  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key) {
+    return TextFormField(
+      // controller: nameController,
+      key: key,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Поле не заполнено';
+        }
+        return null;
+      },
+      onChanged: (value) {
+        validate = value;
+      },
+      keyboardType: TextInputType.name,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      decoration: textFormFieldDecorationWidget(textFormField),
     );
   }
 }
+
+InputDecoration textFormFieldDecorationWidget(String text) {
+  return InputDecoration(
+    // errorText: 'Поле обязательно для заполнения',
+    border: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      borderSide: BorderSide(color: Colors.transparent),
+    ),
+    labelText: text,
+    labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+  );
+}
+
 
 class ReservationBlackDataText extends StatelessWidget {
   const ReservationBlackDataText({
@@ -572,4 +455,70 @@ class ReservationGreyDataText extends StatelessWidget {
       ),
     );
   }
+}
+
+class PhoneNumberTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final int newTextLength = newValue.text.length;
+    int selectionIndex = newValue.selection.end;
+    int usedSubstringIndex = 0;
+    final StringBuffer newText = StringBuffer();
+    if (newTextLength >= 2) {
+      newText.write('${newValue.text.substring(0, usedSubstringIndex = 1)}-');
+      if (newValue.selection.end >= 2) {
+        selectionIndex += 1;
+      }
+    }
+    if (newTextLength >= 5) {
+      newText.write('${newValue.text.substring(1, usedSubstringIndex = 4)}-');
+      if (newValue.selection.end >= 5) {
+        selectionIndex++;
+      }
+    }
+    if (newTextLength >= 8) {
+      newText.write('${newValue.text.substring(4, usedSubstringIndex = 7)}-');
+      if (newValue.selection.end >= 8) {
+        selectionIndex++;
+      }
+    }
+    if (newTextLength >= 9) {
+      newText.write('${newValue.text.substring(7, usedSubstringIndex = 9)}-');
+      if (newValue.selection.end >= 9) {
+        selectionIndex++;
+      }
+    }
+    if (newTextLength >= 12) {
+      newText.write(newValue.text.substring(9, usedSubstringIndex = 11));
+      if (newValue.selection.end >= 12) {
+        selectionIndex++;
+      }
+    }
+    if (newTextLength >= usedSubstringIndex) {
+      newText.write(newValue.text.substring(usedSubstringIndex));
+    }
+    return TextEditingValue(
+      text: newText.toString(),
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+  }
+}
+
+class Keys {
+  static final nameKey = GlobalKey<FormState>();
+  static final surnameKey = GlobalKey<FormState>();
+  static final birthdayKey = GlobalKey<FormState>();
+  static final citizenshipKey = GlobalKey<FormState>();
+  static final passportNumber = GlobalKey<FormState>();
+  static final passportValidityPeriod = GlobalKey<FormState>();
+}
+
+class ExampleMask {
+  final TextEditingController textController = TextEditingController();
+  final MaskTextInputFormatter formatter;
+  final FormFieldValidator<String>? validator;
+  final String hint;
+  final TextInputType textInputType;
+
+  ExampleMask({required this.formatter, this.validator, required this.hint, required this.textInputType});
 }

@@ -21,20 +21,21 @@ class Network {
   }
 }
 
-Future<String> getNetworkData() async {
-  final network = Network('https://run.mocky.io/v3/35e0d18e-2521-4f1b-a575-f0fe366f66e3');
+Future<String> getNetworkDataForHotel() async {
+  final network = Network('https://run.mocky.io/v3/8b4eaeb3-2e53-4286-995d-df11fc6fc28f');
   final networkData = await network.getData();
   return networkData;
 }
 
 Future<String> getNetworkDataForRoom() async {
-  final network = Network('https://run.mocky.io/v3/f9a38183-6f95-43aa-853a-9c83cbb05ecd');
+  // final network = Network('https://run.mocky.io/v3/7d6f62cc-7294-4606-818d-33402b2ae8dd');
+  final network = Network('https://run.mocky.io/v3/524a57ad-f734-4a82-a760-3f1ef76c8e87');
   final networkData = await network.getData();
   return networkData;
 }
 
 Future<String> getNetworkDataFromReservation() async {
-  final network = Network('https://run.mocky.io/v3/e8868481-743f-4eb2-a0d7-2bc4012275c8');
+  final network = Network('https://run.mocky.io/v3/96cf7c34-472a-47e1-acca-2c4f007b48be');
   final networkData = await network.getData();
   return networkData;
 }
