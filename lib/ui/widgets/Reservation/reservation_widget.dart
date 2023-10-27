@@ -12,7 +12,6 @@ import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
-import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
@@ -84,8 +83,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _mobileFormatter = PhoneNumberTextInputFormatter();
-    final _newMobileFormatter = NumberTextInputFormatter();
+    final mobileFormatter = PhoneNumberTextInputFormatter();
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
 
@@ -93,7 +91,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
     final String endTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(3, 6);
     final String tourPrice = reservation.tourPrice.toString();
-    final String tourPriceWithSeparate = tourPrice.substring(0, 4) + ' ' + tourPrice.substring(4, 6) + " " +tourPrice.substring(6, tourPrice.length);
     final String fuelCharge = reservation.fuelCharge.toString();
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
@@ -232,7 +229,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       // maskFormatter,
-                      _mobileFormatter,
+                      mobileFormatter,
                       // _newMobileFormatter,
                     ],
                     maxLength: 17,
@@ -364,8 +361,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   ReservationTourPricesTextWidget(header: 'Сервисный сбор', amount: '$serviceCharge ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
                   ReservationTourPricesTextWidget(header: 'К оплате', amount: '$payable ₽', color: AppColors.roomDetailsTextColor),
-                  const SizedBox(height: 10.0),
-                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$tourPriceWithSeparate ₽', color: AppColors.roomDetailsTextColor),
                   const SizedBox(height: 10.0),
                 ],
               ),
@@ -505,52 +500,6 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
     return TextEditingValue(
       text: newText.toString(),
       selection: TextSelection.collapsed(offset: newText.length),
-    );
-  }
-}
-
-class NumberTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final newTextLength = newValue.text.length;
-    int selectionIndex = newValue.selection.end;
-    int usedSubstringIndex = 1;
-    final newTextBuffer = StringBuffer();
-
-    if (newTextLength >= 1) {
-      if (newValue.text.startsWith(RegExp(r'[789]'))) {
-        newTextBuffer.write('+7');
-        if (newValue.text.startsWith('9')) {
-          newTextBuffer.write('(9');
-          selectionIndex = 4;
-        }
-        if (newValue.selection.end >= 1) selectionIndex++;
-      }
-    }
-
-    if (newTextLength >= 2) {
-      newTextBuffer.write('(${newValue.text.substring(1, usedSubstringIndex = 2)}');
-      if (newValue.selection.end >= 2) selectionIndex++;
-    }
-    if (newTextLength >= 5) {
-      newTextBuffer.write('${newValue.text.substring(usedSubstringIndex, usedSubstringIndex = 4)})');
-      if (newValue.selection.end >= 4) selectionIndex++;
-    }
-    if (newTextLength >= 8) {
-      newTextBuffer.write('${newValue.text.substring(usedSubstringIndex, usedSubstringIndex = 7)}-');
-      if (newValue.selection.end >= 7) selectionIndex++;
-    }
-    if (newTextLength >= 10) {
-      newTextBuffer.write('${newValue.text.substring(usedSubstringIndex, usedSubstringIndex = 9)}-');
-      if (newValue.selection.end >= 9) selectionIndex++;
-    }
-
-// Dump the rest.
-    if (newTextLength > usedSubstringIndex) newTextBuffer.write(newValue.text.substring(usedSubstringIndex, newTextLength));
-
-    return TextEditingValue(
-      text: newTextBuffer.toString(),
-      selection: TextSelection.collapsed(offset: selectionIndex),
     );
   }
 }
