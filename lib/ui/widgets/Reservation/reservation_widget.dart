@@ -300,11 +300,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristTextFormField('Имя', 'Имя', Keys.nameKey),
+                          customTouristTextFormField('Имя', 'Имя', Keys.nameKey, TextInputType.name),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Фамилия', 'Фамилия', Keys.surnameKey),
+                          customTouristTextFormField('Фамилия', 'Фамилия', Keys.surnameKey, TextInputType.name),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Дата рождения', 'Дата рождения', Keys.birthdayKey),
+                          customTouristTextFormField('Дата рождения', 'Дата рождения', Keys.birthdayKey, TextInputType.),
                           const SizedBox(height: 10.0),
                           customTouristTextFormField('Гражданство', 'Гражданство', Keys.citizenshipKey),
                           const SizedBox(height: 10.0),
@@ -385,7 +385,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   }
 
 
-  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key) {
+  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key, TextInputType type) {
     return TextFormField(
       // controller: nameController,
       key: key,
@@ -398,7 +398,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       onChanged: (value) {
         validate = value;
       },
-      keyboardType: TextInputType.name,
+      keyboardType: type,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(textFormField),
     );
