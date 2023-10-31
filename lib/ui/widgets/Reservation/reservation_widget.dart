@@ -12,6 +12,7 @@ import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
@@ -95,9 +96,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
     String email;
 
-    var maskFormatter = MaskTextInputFormatter(
-      mask: '* (***) ***-**-**',
-      filter: {"*": RegExp(r'[0-9]')},
+    var passportFormatter = MaskTextInputFormatter(
+      mask: '####-######',
+      filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
     );
 
@@ -300,17 +301,44 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristTextFormField('Имя', 'Имя', Keys.nameKey, TextInputType.name),
+                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя'),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Фамилия', 'Фамилия', Keys.surnameKey, TextInputType.name),
+                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Дата рождения', 'Дата рождения', Keys.birthdayKey, TextInputType.),
+                          // Дата рождения
+                          customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Гражданство', 'Гражданство', Keys.citizenshipKey),
+                          // Citizenship
+                          TextFormField(
+                            key: Keys.citizenshipKey,
+                            validator: (value) {
+                              return null;
+                            },
+                            onChanged: (value) {},
+                            inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                            decoration: textFormFieldDecorationWidget('Гражданство'),
+                          ),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Номер паспорта', 'Номер паспорта', Keys.passportNumber),
+                          // Passport number
+                          TextFormField(
+                            key: Keys.passportNumber,
+                            validator: (value) {
+                              return null;
+                            },
+                            onChanged: (value) {},
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(11),
+                              FilteringTextInputFormatter.singleLineFormatter,
+                              passportFormatter,
+                            ],
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                            decoration: textFormFieldDecorationWidget('Номер паспорта'),
+                          ),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Срок действия загранпаспорта', 'Срок действия загранпаспорта', Keys.passportValidityPeriod),
+                          customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
                           const SizedBox(height: 10.0),
                         ],
                       ),
@@ -384,6 +412,44 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
+  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(Key key, String text) {
+    return TextFormField(
+      key: key,
+      validator: (value) {
+        // TODO validator don't work
+        return birthDateValidator(value!);
+      },
+      onChanged: (value) {},
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+        FilteringTextInputFormatter.singleLineFormatter,
+        BirthTextInputFormatter(),
+      ],
+      keyboardType: TextInputType.datetime,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      decoration: textFormFieldDecorationWidget(text),
+    );
+  }
+
+  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text) {
+    return TextFormField(
+      // controller: nameController,
+      key: key,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Поле не заполнено';
+        }
+        return null;
+      },
+      onChanged: (value) {},
+      inputFormatters: [
+        FilteringTextInputFormatter.singleLineFormatter,
+      ],
+      keyboardType: TextInputType.name,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      decoration: textFormFieldDecorationWidget(text),
+    );
+  }
 
   TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key, TextInputType type) {
     return TextFormField(
@@ -398,11 +464,46 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       onChanged: (value) {
         validate = value;
       },
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+        FilteringTextInputFormatter.singleLineFormatter,
+        BirthTextInputFormatter(),
+      ],
       keyboardType: type,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(textFormField),
     );
   }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: newValue.text.toUpperCase());
+  }
+}
+
+String? birthDateValidator(String value) {
+  final DateTime now = DateTime.now();
+  final DateFormat formatter = DateFormat('yyyy');
+  final String formatted = formatter.format(now);
+  String str1 = value;
+  List<String> str2 = str1.split('/');
+  String month = str2.isNotEmpty ? str2[0] : '';
+  String day = str2.length > 1 ? str2[1] : '';
+  String year = str2.length > 2 ? str2[2] : '';
+  if (value.isEmpty) {
+    return 'Дата рождения не заполнена';
+  } else if (int.parse(month) > 13) {
+    return 'Неверно указан месяц';
+  } else if (int.parse(day) > 32) {
+    return 'Неверно указан день';
+  } else if ((int.parse(year) > int.parse(formatted))) {
+    return 'Неверно указан год';
+  } else if ((int.parse(year) < 1920)) {
+    return 'Неверно указан год';
+  }
+  return null;
 }
 
 InputDecoration textFormFieldDecorationWidget(String text) {
@@ -416,7 +517,6 @@ InputDecoration textFormFieldDecorationWidget(String text) {
     labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
   );
 }
-
 
 class ReservationBlackDataText extends StatelessWidget {
   const ReservationBlackDataText({
@@ -499,6 +599,36 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
       text: newText.toString(),
       selection: TextSelection.collapsed(offset: newText.length),
     );
+  }
+}
+
+class BirthTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    if (oldValue.text.length >= newValue.text.length) {
+      return newValue;
+    }
+    var dateText = _addSeparator(newValue.text, '/');
+    return newValue.copyWith(text: dateText, selection: updateCursorPosition(dateText));
+  }
+
+  String _addSeparator(String value, String separator) {
+    value = value.replaceAll('/', '');
+    var newString = '';
+    for (int i = 0; i < value.length; i++) {
+      newString += value[i];
+      if (i == 1) {
+        newString += separator;
+      }
+      if (i == 3) {
+        newString += separator;
+      }
+    }
+    return newString;
+  }
+
+  TextSelection updateCursorPosition(String text) {
+    return TextSelection.fromPosition(TextPosition(offset: text.length));
   }
 }
 
