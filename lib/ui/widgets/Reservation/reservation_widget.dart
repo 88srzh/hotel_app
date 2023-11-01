@@ -323,6 +323,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                           const SizedBox(height: 10.0),
                           // Passport number
                           TextFormField(
+                            focusNode: node,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             key: Keys.passportNumber,
                             validator: (value) {
                               return null;
@@ -437,7 +439,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       key: key,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Поле не заполнено';
+          return 'Пожалуйста заполните поле';
         }
         return null;
       },
@@ -508,7 +510,7 @@ String? birthDateValidator(String value) {
 
 InputDecoration textFormFieldDecorationWidget(String text) {
   return InputDecoration(
-    // errorText: 'Поле обязательно для заполнения',
+    errorText: 'Поле обязательно для заполнения',
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       borderSide: BorderSide(color: Colors.transparent),
