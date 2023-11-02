@@ -11,7 +11,13 @@ import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservation_black_data_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservation_grey_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/upper_case_text_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -58,7 +64,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   bool customTileExpanded = false;
 
-  TextEditingController nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
   final List<Widget> expansionTileWidget = <Widget>[];
   final List<void> expansionTile = <void>[];
   final List<String> names = <String>['Первый турист'];
@@ -84,6 +92,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    bool isError = false;
+    bool isButtonPressed = false;
     final mobileFormatter = PhoneNumberTextInputFormatter();
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
@@ -221,9 +231,26 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   const HeadlineTextWidget(text: 'Информация о покупателе'),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    controller: phoneController,
                     key: phoneFormKey,
-                    onChanged: (phone) {
-                      // print(phone.characters);
+                    validator: (value) {
+                      if (!isButtonPressed) {
+                        return null;
+                      }
+                      isError = true;
+                      if (value!.isEmpty) {
+                        return 'Поле обязательно для заполнения';
+                      } else {
+                        return 'Неверный номер';
+                      }
+                      isError = false;
+                    },
+                    onChanged: (value) {
+                      isButtonPressed = false;
+                      if (isError) {
+                        phoneFormKey.currentState?.validate();
+                      }
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -323,7 +350,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                           const SizedBox(height: 10.0),
                           // Passport number
                           TextFormField(
-                            focusNode: node,
+                            // focusNode: node,
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             key: Keys.passportNumber,
                             validator: (value) {
@@ -427,7 +454,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         FilteringTextInputFormatter.singleLineFormatter,
         BirthTextInputFormatter(),
       ],
-      keyboardType: TextInputType.datetime,
+      keyboardType: TextInputType.number,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(text),
     );
@@ -478,12 +505,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   }
 }
 
-class UpperCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    return newValue.copyWith(text: newValue.text.toUpperCase());
-  }
-}
 
 String? birthDateValidator(String value) {
   final DateTime now = DateTime.now();
@@ -510,7 +531,7 @@ String? birthDateValidator(String value) {
 
 InputDecoration textFormFieldDecorationWidget(String text) {
   return InputDecoration(
-    errorText: 'Поле обязательно для заполнения',
+    // errorText: 'Поле обязательно для заполнения',
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       borderSide: BorderSide(color: Colors.transparent),
@@ -520,135 +541,4 @@ InputDecoration textFormFieldDecorationWidget(String text) {
   );
 }
 
-class ReservationBlackDataText extends StatelessWidget {
-  const ReservationBlackDataText({
-    super.key,
-    required this.reservation,
-  });
 
-  final String reservation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      reservation,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-    );
-  }
-}
-
-class ReservationGreyDataText extends StatelessWidget {
-  const ReservationGreyDataText({
-    super.key,
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 140,
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: AppColors.greyText),
-      ),
-    );
-  }
-}
-
-class PhoneNumberTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final int newTextLength = newValue.text.length;
-    int selectionIndex = newValue.selection.end;
-    int usedSubstringIndex = 0;
-    final StringBuffer newText = StringBuffer();
-    if (newTextLength >= 2) {
-      newText.write('${newValue.text.substring(0, usedSubstringIndex = 1)}-');
-      if (newValue.selection.end >= 2) {
-        selectionIndex += 1;
-      }
-    }
-    if (newTextLength >= 5) {
-      newText.write('${newValue.text.substring(1, usedSubstringIndex = 4)}-');
-      if (newValue.selection.end >= 5) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= 8) {
-      newText.write('${newValue.text.substring(4, usedSubstringIndex = 7)}-');
-      if (newValue.selection.end >= 8) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= 9) {
-      newText.write('${newValue.text.substring(7, usedSubstringIndex = 9)}-');
-      if (newValue.selection.end >= 9) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= 12) {
-      newText.write(newValue.text.substring(9, usedSubstringIndex = 11));
-      if (newValue.selection.end >= 12) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= usedSubstringIndex) {
-      newText.write(newValue.text.substring(usedSubstringIndex));
-    }
-    return TextEditingValue(
-      text: newText.toString(),
-      selection: TextSelection.collapsed(offset: newText.length),
-    );
-  }
-}
-
-class BirthTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    if (oldValue.text.length >= newValue.text.length) {
-      return newValue;
-    }
-    var dateText = _addSeparator(newValue.text, '/');
-    return newValue.copyWith(text: dateText, selection: updateCursorPosition(dateText));
-  }
-
-  String _addSeparator(String value, String separator) {
-    value = value.replaceAll('/', '');
-    var newString = '';
-    for (int i = 0; i < value.length; i++) {
-      newString += value[i];
-      if (i == 1) {
-        newString += separator;
-      }
-      if (i == 3) {
-        newString += separator;
-      }
-    }
-    return newString;
-  }
-
-  TextSelection updateCursorPosition(String text) {
-    return TextSelection.fromPosition(TextPosition(offset: text.length));
-  }
-}
-
-class Keys {
-  static final nameKey = GlobalKey<FormState>();
-  static final surnameKey = GlobalKey<FormState>();
-  static final birthdayKey = GlobalKey<FormState>();
-  static final citizenshipKey = GlobalKey<FormState>();
-  static final passportNumber = GlobalKey<FormState>();
-  static final passportValidityPeriod = GlobalKey<FormState>();
-}
-
-class ExampleMask {
-  final TextEditingController textController = TextEditingController();
-  final MaskTextInputFormatter formatter;
-  final FormFieldValidator<String>? validator;
-  final String hint;
-  final TextInputType textInputType;
-
-  ExampleMask({required this.formatter, this.validator, required this.hint, required this.textInputType});
-}

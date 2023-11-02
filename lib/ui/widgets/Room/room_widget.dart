@@ -11,7 +11,6 @@ import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
-import 'package:hotel_app/ui/widgets/Room/components/room_images_data.dart';
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
