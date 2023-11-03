@@ -11,7 +11,14 @@ import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservation_black_data_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservation_grey_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/upper_case_text_formatter.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
@@ -57,7 +64,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   bool customTileExpanded = false;
 
-  TextEditingController nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
   final List<Widget> expansionTileWidget = <Widget>[];
   final List<void> expansionTile = <void>[];
   final List<String> names = <String>['Первый турист'];
@@ -83,23 +92,23 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    bool isError = false;
+    bool isButtonPressed = false;
     final mobileFormatter = PhoneNumberTextInputFormatter();
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
-    final String startTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(0, 3);
-    final String endTourPrice = reservation.tourPrice.toStringAsFixed(4).substring(3, 6);
-    final String tourPrice = reservation.tourPrice.toString();
+    final String tourPrice = "${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}";
     final String fuelCharge = reservation.fuelCharge.toString();
     final String serviceCharge = reservation.serviceCharge.toString();
     final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
 
     String email;
 
-    var maskFormatter = MaskTextInputFormatter(
-      mask: '* (***) ***-**-**',
-      filter: {"*": RegExp(r'[0-9]')},
+    var passportFormatter = MaskTextInputFormatter(
+      mask: '####-######',
+      filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
     );
 
@@ -222,9 +231,26 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   const HeadlineTextWidget(text: 'Информация о покупателе'),
                   const SizedBox(height: 10.0),
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    controller: phoneController,
                     key: phoneFormKey,
-                    onChanged: (phone) {
-                      // print(phone.characters);
+                    validator: (value) {
+                      if (!isButtonPressed) {
+                        return null;
+                      }
+                      isError = true;
+                      if (value!.isEmpty) {
+                        return 'Поле обязательно для заполнения';
+                      } else {
+                        return 'Неверный номер';
+                      }
+                      isError = false;
+                    },
+                    onChanged: (value) {
+                      isButtonPressed = false;
+                      if (isError) {
+                        phoneFormKey.currentState?.validate();
+                      }
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -302,17 +328,46 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristTextFormField('Имя', 'Имя', Keys.nameKey),
+                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя'),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Фамилия', 'Фамилия', Keys.surnameKey),
+                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Дата рождения', 'Дата рождения', Keys.birthdayKey),
+                          // Дата рождения
+                          customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Гражданство', 'Гражданство', Keys.citizenshipKey),
+                          // Citizenship
+                          TextFormField(
+                            key: Keys.citizenshipKey,
+                            validator: (value) {
+                              return null;
+                            },
+                            onChanged: (value) {},
+                            inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                            decoration: textFormFieldDecorationWidget('Гражданство'),
+                          ),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Номер паспорта', 'Номер паспорта', Keys.passportNumber),
+                          // Passport number
+                          TextFormField(
+                            // focusNode: node,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            key: Keys.passportNumber,
+                            validator: (value) {
+                              return null;
+                            },
+                            onChanged: (value) {},
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(11),
+                              FilteringTextInputFormatter.singleLineFormatter,
+                              passportFormatter,
+                            ],
+                            keyboardType: TextInputType.number,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                            decoration: textFormFieldDecorationWidget('Номер паспорта'),
+                          ),
                           const SizedBox(height: 10.0),
-                          customTouristTextFormField('Срок действия загранпаспорта', 'Срок действия загранпаспорта', Keys.passportValidityPeriod),
+                          customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
                           const SizedBox(height: 10.0),
                         ],
                       ),
@@ -354,7 +409,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               child: Column(
                 children: [
-                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$startTourPrice $endTourPrice ₽', color: Colors.black),
+                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$tourPrice ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
                   ReservationTourPricesTextWidget(header: 'Топливный сбор', amount: '$fuelCharge ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
@@ -386,8 +441,46 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
+  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(Key key, String text) {
+    return TextFormField(
+      key: key,
+      validator: (value) {
+        // TODO validator don't work
+        return birthDateValidator(value!);
+      },
+      onChanged: (value) {},
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+        FilteringTextInputFormatter.singleLineFormatter,
+        BirthTextInputFormatter(),
+      ],
+      keyboardType: TextInputType.number,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      decoration: textFormFieldDecorationWidget(text),
+    );
+  }
 
-  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key) {
+  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text) {
+    return TextFormField(
+      // controller: nameController,
+      key: key,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Пожалуйста заполните поле';
+        }
+        return null;
+      },
+      onChanged: (value) {},
+      inputFormatters: [
+        FilteringTextInputFormatter.singleLineFormatter,
+      ],
+      keyboardType: TextInputType.name,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      decoration: textFormFieldDecorationWidget(text),
+    );
+  }
+
+  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key, TextInputType type) {
     return TextFormField(
       // controller: nameController,
       key: key,
@@ -400,11 +493,40 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       onChanged: (value) {
         validate = value;
       },
-      keyboardType: TextInputType.name,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+        FilteringTextInputFormatter.singleLineFormatter,
+        BirthTextInputFormatter(),
+      ],
+      keyboardType: type,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(textFormField),
     );
   }
+}
+
+
+String? birthDateValidator(String value) {
+  final DateTime now = DateTime.now();
+  final DateFormat formatter = DateFormat('yyyy');
+  final String formatted = formatter.format(now);
+  String str1 = value;
+  List<String> str2 = str1.split('/');
+  String month = str2.isNotEmpty ? str2[0] : '';
+  String day = str2.length > 1 ? str2[1] : '';
+  String year = str2.length > 2 ? str2[2] : '';
+  if (value.isEmpty) {
+    return 'Дата рождения не заполнена';
+  } else if (int.parse(month) > 13) {
+    return 'Неверно указан месяц';
+  } else if (int.parse(day) > 32) {
+    return 'Неверно указан день';
+  } else if ((int.parse(year) > int.parse(formatted))) {
+    return 'Неверно указан год';
+  } else if ((int.parse(year) < 1920)) {
+    return 'Неверно указан год';
+  }
+  return null;
 }
 
 InputDecoration textFormFieldDecorationWidget(String text) {
@@ -420,105 +542,3 @@ InputDecoration textFormFieldDecorationWidget(String text) {
 }
 
 
-class ReservationBlackDataText extends StatelessWidget {
-  const ReservationBlackDataText({
-    super.key,
-    required this.reservation,
-  });
-
-  final String reservation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      reservation,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-    );
-  }
-}
-
-class ReservationGreyDataText extends StatelessWidget {
-  const ReservationGreyDataText({
-    super.key,
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 140,
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: AppColors.greyText),
-      ),
-    );
-  }
-}
-
-class PhoneNumberTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final int newTextLength = newValue.text.length;
-    int selectionIndex = newValue.selection.end;
-    int usedSubstringIndex = 0;
-    final StringBuffer newText = StringBuffer();
-    if (newTextLength >= 2) {
-      newText.write('${newValue.text.substring(0, usedSubstringIndex = 1)}-');
-      if (newValue.selection.end >= 2) {
-        selectionIndex += 1;
-      }
-    }
-    if (newTextLength >= 5) {
-      newText.write('${newValue.text.substring(1, usedSubstringIndex = 4)}-');
-      if (newValue.selection.end >= 5) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= 8) {
-      newText.write('${newValue.text.substring(4, usedSubstringIndex = 7)}-');
-      if (newValue.selection.end >= 8) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= 9) {
-      newText.write('${newValue.text.substring(7, usedSubstringIndex = 9)}-');
-      if (newValue.selection.end >= 9) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= 12) {
-      newText.write(newValue.text.substring(9, usedSubstringIndex = 11));
-      if (newValue.selection.end >= 12) {
-        selectionIndex++;
-      }
-    }
-    if (newTextLength >= usedSubstringIndex) {
-      newText.write(newValue.text.substring(usedSubstringIndex));
-    }
-    return TextEditingValue(
-      text: newText.toString(),
-      selection: TextSelection.collapsed(offset: newText.length),
-    );
-  }
-}
-
-class Keys {
-  static final nameKey = GlobalKey<FormState>();
-  static final surnameKey = GlobalKey<FormState>();
-  static final birthdayKey = GlobalKey<FormState>();
-  static final citizenshipKey = GlobalKey<FormState>();
-  static final passportNumber = GlobalKey<FormState>();
-  static final passportValidityPeriod = GlobalKey<FormState>();
-}
-
-class ExampleMask {
-  final TextEditingController textController = TextEditingController();
-  final MaskTextInputFormatter formatter;
-  final FormFieldValidator<String>? validator;
-  final String hint;
-  final TextInputType textInputType;
-
-  ExampleMask({required this.formatter, this.validator, required this.hint, required this.textInputType});
-}
