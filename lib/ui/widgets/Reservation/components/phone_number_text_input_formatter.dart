@@ -31,11 +31,11 @@ class PhoneNumberTextInputFormatter extends TextInputFormatter {
         selectionIndex++;
       }
     }
-    if (newTextLength >= 12) {
+    if (newTextLength >= 11) {
       newText.write(newValue.text.substring(9, usedSubstringIndex = 11));
-      if (newValue.selection.end >= 12) {
-        selectionIndex++;
-      }
+      // if (newValue.selection.end >= 12) {
+      //   selectionIndex++;
+      // }
     }
     if (newTextLength >= usedSubstringIndex) {
       newText.write(newValue.text.substring(usedSubstringIndex));
