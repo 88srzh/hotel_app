@@ -125,6 +125,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       return value!.isNotEmpty && !regex.hasMatch(value) ? 'Enter a valid email address' : null;
     }
 
+    String errorText = '';
+
     return Scaffold(
       appBar: const CustomAppBarWidget(title: 'Бронирование'),
       body: ListView(
@@ -328,9 +330,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя'),
+                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя', 'Не используйте пробелы'),
                           const SizedBox(height: 10.0),
-                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
+                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия', 'Поле не заполнено'),
                           const SizedBox(height: 10.0),
                           // Дата рождения
                           customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
@@ -338,14 +340,22 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                           // Citizenship
                           TextFormField(
                             key: Keys.citizenshipKey,
-                            validator: (value) {
-                              return null;
+                            // validator: (value) {
+                            //   return null;
+                            // },
+                            onChanged: (value) {
+                              setState(() {
+                                if (value.contains(' ')) {
+                                  errorText = 'Не используйте пробелы';
+                                } else {
+                                  errorText = '';
+                                }
+                              });
                             },
-                            onChanged: (value) {},
                             inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
                             keyboardType: TextInputType.number,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                            decoration: textFormFieldDecorationWidget('Гражданство'),
+                            decoration: textFormFieldDecorationWidget('Гражданство', 'Поле не заполнено'),
                           ),
                           const SizedBox(height: 10.0),
                           // Passport number
@@ -364,7 +374,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                             ],
                             keyboardType: TextInputType.number,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                            decoration: textFormFieldDecorationWidget('Номер паспорта'),
+                            decoration: textFormFieldDecorationWidget('Номер паспорта', 'Поле не заполнено'),
                           ),
                           const SizedBox(height: 10.0),
                           customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
@@ -456,31 +466,39 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ],
       keyboardType: TextInputType.number,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(text),
+      decoration: textFormFieldDecorationWidget(text, 'Поле не заполнено'),
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text) {
+  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text, String errorText) {
     return TextFormField(
       // controller: nameController,
       key: key,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Пожалуйста заполните поле';
-        }
-        return null;
+      // validator: (value) {
+      //   if (value == null || value.isEmpty) {
+      //     return 'Пожалуйста заполните поле';
+      //   }
+      //   return null;
+      // },
+      onChanged: (value) {
+        setState(() {
+          if (value.contains(' ')) {
+            errorText = 'Не используйте пробелы';
+          } else {
+            errorText = '';
+          }
+        });
       },
-      onChanged: (value) {},
       inputFormatters: [
-        FilteringTextInputFormatter.singleLineFormatter,
+        // FilteringTextInputFormatter.singleLineFormatter,
       ],
       keyboardType: TextInputType.name,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(text),
+      decoration: textFormFieldDecorationWidget(text, errorText),
     );
   }
 
-  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key, TextInputType type) {
+  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key, TextInputType type, String errorText) {
     return TextFormField(
       // controller: nameController,
       key: key,
@@ -500,11 +518,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ],
       keyboardType: type,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(textFormField),
+      decoration: textFormFieldDecorationWidget(textFormField, errorText),
     );
   }
 }
-
 
 String? birthDateValidator(String value) {
   final DateTime now = DateTime.now();
@@ -529,9 +546,9 @@ String? birthDateValidator(String value) {
   return null;
 }
 
-InputDecoration textFormFieldDecorationWidget(String text) {
+InputDecoration textFormFieldDecorationWidget(String text, String errorText) {
   return InputDecoration(
-    // errorText: 'Поле обязательно для заполнения',
+    errorText: errorText.isEmpty ? null : errorText,
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       borderSide: BorderSide(color: Colors.transparent),
@@ -540,5 +557,3 @@ InputDecoration textFormFieldDecorationWidget(String text) {
     labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
   );
 }
-
-
