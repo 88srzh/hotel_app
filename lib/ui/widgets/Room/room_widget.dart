@@ -11,6 +11,7 @@ import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/loading_indicator_widget.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/reservation_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/test.dart';
 
 class RoomWidget extends StatefulWidget {
   const RoomWidget({super.key});
@@ -223,11 +224,10 @@ class _RoomWidgetState extends State<RoomWidget> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => ReservationWidget(
-                                            onSubmit: (String value) {},
-                                          ),
+                                          builder: (context) => const ReservationWidget(),
                                         ),
                                       );
+                                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const SubmitPage()));
                                     },
                                   ),
                                 ),
