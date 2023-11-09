@@ -12,18 +12,19 @@ import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/hotel_block_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_black_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_grey_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/reservationd_data_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/upper_case_text_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key});
-
 
   @override
   State<ReservationWidget> createState() => _ReservationWidgetState();
@@ -50,7 +51,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-
 
   void getReservationData() async {
     final reservationJson = await getNetworkDataFromReservation();
@@ -148,29 +148,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       appBar: const CustomAppBarWidget(title: 'Бронирование'),
       body: ListView(
         children: [
-          Container(
-            height: 120.0,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10.0),
-                  FiveStarRowWidget(rating: reservation.horating.toString(), ratingName: reservation.ratingName),
-                  const SizedBox(height: 10.0),
-                  const HeadlineTextWidget(text: 'Steigenberger Makadi'),
-                  Text(
-                    reservation.hotelAdress,
-                    style: const TextStyle(fontSize: 14, color: AppColors.blueText),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          HotelBlockWidget(reservation: reservation),
           const SizedBox(height: 10.0),
           ReservationDataWidget(reservation: reservation),
           // information about customer
@@ -479,82 +457,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   }
 }
 
-class ReservationDataWidget extends StatelessWidget {
-  const ReservationDataWidget({
-    super.key,
-    required this.reservation,
-  });
 
-  final Reservation reservation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 280.0,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const ReservationGreyDataText(text: 'Вылет из'),
-                ReservationBlackDataText(reservation: reservation.departure),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              children: [
-                const ReservationGreyDataText(text: 'Страна, город'),
-                ReservationBlackDataText(reservation: reservation.arrivalCountry),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              children: [
-                const ReservationGreyDataText(text: 'Даты'),
-                ReservationBlackDataText(reservation: '${reservation.tourDateStart} - ${reservation.tourDateStop}')
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              children: [
-                const ReservationGreyDataText(text: 'Кол-во ночей'),
-                ReservationBlackDataText(reservation: reservation.numberOfNights.toString()),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                const ReservationGreyDataText(text: 'Отель'),
-                Expanded(child: ReservationBlackDataText(reservation: reservation.hotelName)),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              children: [
-                const ReservationGreyDataText(text: 'Номер'),
-                Expanded(child: ReservationBlackDataText(reservation: reservation.room)),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              children: [
-                const ReservationGreyDataText(text: 'Питание'),
-                ReservationBlackDataText(reservation: reservation.nutrition),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 String? birthDateValidator(String value) {
   final DateTime now = DateTime.now();
