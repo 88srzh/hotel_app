@@ -24,6 +24,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key});
 
+
   @override
   State<ReservationWidget> createState() => _ReservationWidgetState();
 }
@@ -47,6 +48,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     serviceCharge: 0,
   );
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+
   void getReservationData() async {
     final reservationJson = await getNetworkDataFromReservation();
     final dynamic reservationMap = json.decode(reservationJson);
@@ -62,10 +67,13 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     getReservationData();
   }
 
-  bool customTileExpanded = false;
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  bool customTileExpanded = false;
 
   final List<Widget> expansionTileWidget = <Widget>[];
   final List<void> expansionTile = <void>[];
@@ -88,6 +96,15 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     setState(() {
       names.insert(2, listOfTourists[1]);
     });
+  }
+
+  String? get _errorNameText {
+    final text = nameController.value.text;
+
+    if (text.isEmpty) {
+      return 'Заполните имя';
+    }
+    return null;
   }
 
   @override
@@ -155,70 +172,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
             ),
           ),
           const SizedBox(height: 10.0),
-          Container(
-            height: 280.0,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const ReservationGreyDataText(text: 'Вылет из'),
-                      ReservationBlackDataText(reservation: reservation.departure),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      const ReservationGreyDataText(text: 'Страна, город'),
-                      ReservationBlackDataText(reservation: reservation.arrivalCountry),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      const ReservationGreyDataText(text: 'Даты'),
-                      ReservationBlackDataText(reservation: '${reservation.tourDateStart} - ${reservation.tourDateStop}')
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      const ReservationGreyDataText(text: 'Кол-во ночей'),
-                      ReservationBlackDataText(reservation: reservation.numberOfNights.toString()),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      const ReservationGreyDataText(text: 'Отель'),
-                      Expanded(child: ReservationBlackDataText(reservation: reservation.hotelName)),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      const ReservationGreyDataText(text: 'Номер'),
-                      Expanded(child: ReservationBlackDataText(reservation: reservation.room)),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      const ReservationGreyDataText(text: 'Питание'),
-                      ReservationBlackDataText(reservation: reservation.nutrition),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+          ReservationDataWidget(reservation: reservation),
           // information about customer
           Container(
             decoration: const BoxDecoration(
@@ -330,7 +284,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя', 'Не используйте пробелы'),
+                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя', _errorNameText!),
                           const SizedBox(height: 10.0),
                           customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия', 'Поле не заполнено'),
                           const SizedBox(height: 10.0),
@@ -436,16 +390,18 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       bottomNavigationBar: CustomBottomNavigationBar(
         text: 'Оплатить $payable ₽',
         onPressed: () {
-          if (Keys.nameKey.currentState == null &&
-              Keys.surnameKey.currentState == null &&
-              Keys.birthdayKey.currentState == null &&
-              Keys.citizenshipKey.currentState == null &&
-              Keys.passportNumber.currentState == null &&
-              Keys.passportValidityPeriod.currentState == null) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
-          } else {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
-          }
+          // if (Keys.nameKey.currentState == null &&
+          //     Keys.surnameKey.currentState == null &&
+          //     Keys.birthdayKey.currentState == null &&
+          //     Keys.citizenshipKey.currentState == null &&
+          //     Keys.passportNumber.currentState == null &&
+          //     Keys.passportValidityPeriod.currentState == null) {
+          //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
+          // } else {
+          nameController.value.text.isNotEmpty ? Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget())) : null;
+          // } else {
+          //         Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+          // }
         },
       ),
     );
@@ -472,7 +428,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   TextFormField customTouristNameAndSurnameTextFormField(Key key, String text, String errorText) {
     return TextFormField(
-      // controller: nameController,
+      controller: nameController,
       key: key,
       // validator: (value) {
       //   if (value == null || value.isEmpty) {
@@ -490,7 +446,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         });
       },
       inputFormatters: [
-        // FilteringTextInputFormatter.singleLineFormatter,
+        FilteringTextInputFormatter.singleLineFormatter,
       ],
       keyboardType: TextInputType.name,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -519,6 +475,83 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       keyboardType: type,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(textFormField, errorText),
+    );
+  }
+}
+
+class ReservationDataWidget extends StatelessWidget {
+  const ReservationDataWidget({
+    super.key,
+    required this.reservation,
+  });
+
+  final Reservation reservation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 280.0,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const ReservationGreyDataText(text: 'Вылет из'),
+                ReservationBlackDataText(reservation: reservation.departure),
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const ReservationGreyDataText(text: 'Страна, город'),
+                ReservationBlackDataText(reservation: reservation.arrivalCountry),
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const ReservationGreyDataText(text: 'Даты'),
+                ReservationBlackDataText(reservation: '${reservation.tourDateStart} - ${reservation.tourDateStop}')
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const ReservationGreyDataText(text: 'Кол-во ночей'),
+                ReservationBlackDataText(reservation: reservation.numberOfNights.toString()),
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                const ReservationGreyDataText(text: 'Отель'),
+                Expanded(child: ReservationBlackDataText(reservation: reservation.hotelName)),
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const ReservationGreyDataText(text: 'Номер'),
+                Expanded(child: ReservationBlackDataText(reservation: reservation.room)),
+              ],
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              children: [
+                const ReservationGreyDataText(text: 'Питание'),
+                ReservationBlackDataText(reservation: reservation.nutrition),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
