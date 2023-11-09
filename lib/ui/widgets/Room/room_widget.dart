@@ -220,7 +220,14 @@ class _RoomWidgetState extends State<RoomWidget> {
                                       style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservationWidget()));
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ReservationWidget(
+                                            onSubmit: (String value) {},
+                                          ),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),

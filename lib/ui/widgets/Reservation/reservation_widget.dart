@@ -11,6 +11,7 @@ import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/final_price_block_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/hotel_block_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
@@ -21,13 +22,24 @@ import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
-  const ReservationWidget({super.key});
+  const ReservationWidget({super.key, required this.onSubmit});
+
+  final ValueChanged<String> onSubmit;
 
   @override
   State<ReservationWidget> createState() => _ReservationWidgetState();
 }
 
 class _ReservationWidgetState extends State<ReservationWidget> {
+  String _name = '';
+  bool _submitted = false;
+
+  void _submit() {
+    if (Keys.nameKey.currentState!.validate()) {
+      widget.onSubmit(_name);
+    }
+  }
+
   var reservation = const Reservation(
     id: 0,
     hotelName: '',
@@ -47,6 +59,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   );
 
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController surnameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
   void getReservationData() async {
@@ -127,14 +140,14 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
 
     String? validateEmail(String? value) {
-      const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
+      const emailPattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
           r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
           r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
           r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
           r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
           r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
           r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
-      final regex = RegExp(pattern);
+      final regex = RegExp(emailPattern);
 
       return value!.isNotEmpty && !regex.hasMatch(value) ? 'Enter a valid email address' : null;
     }
@@ -259,9 +272,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя', _errorNameText!),
+                          customTouristNameAndSurnameTextFormField(Keys.nameKey, nameController, 'Имя'),
                           const SizedBox(height: 10.0),
-                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия', 'Поле не заполнено'),
+                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, surnameController, 'Фамилия'),
                           const SizedBox(height: 10.0),
                           // Дата рождения
                           customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
@@ -284,7 +297,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                             inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
                             keyboardType: TextInputType.number,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                            decoration: textFormFieldDecorationWidget('Гражданство', 'Поле не заполнено'),
+                            decoration: textFormFieldDecorationWidget('Гражданство'),
                           ),
                           const SizedBox(height: 10.0),
                           // Passport number
@@ -303,7 +316,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                             ],
                             keyboardType: TextInputType.number,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                            decoration: textFormFieldDecorationWidget('Номер паспорта', 'Поле не заполнено'),
+                            decoration: textFormFieldDecorationWidget('Номер паспорта'),
                           ),
                           const SizedBox(height: 10.0),
                           customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
@@ -339,27 +352,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
             ),
           ),
           const SizedBox(height: 10.0),
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              color: Colors.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              child: Column(
-                children: [
-                  ReservationTourPricesTextWidget(header: 'Тур', amount: '$tourPrice ₽', color: Colors.black),
-                  const SizedBox(height: 10.0),
-                  ReservationTourPricesTextWidget(header: 'Топливный сбор', amount: '$fuelCharge ₽', color: Colors.black),
-                  const SizedBox(height: 10.0),
-                  ReservationTourPricesTextWidget(header: 'Сервисный сбор', amount: '$serviceCharge ₽', color: Colors.black),
-                  const SizedBox(height: 10.0),
-                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$payable ₽', color: AppColors.roomDetailsTextColor),
-                  const SizedBox(height: 10.0),
-                ],
-              ),
-            ),
-          ),
+          FinalPriceBlockWidget(tourPrice: tourPrice, fuelCharge: fuelCharge, serviceCharge: serviceCharge, payable: payable),
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -373,7 +366,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
           //     Keys.passportValidityPeriod.currentState == null) {
           //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
           // } else {
-          nameController.value.text.isNotEmpty ? Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget())) : null;
+          _name.isNotEmpty ? _submit : null;
           // } else {
           //         Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
           // }
@@ -397,35 +390,32 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ],
       keyboardType: TextInputType.number,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(text, 'Поле не заполнено'),
+      decoration: textFormFieldDecorationWidget(text),
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text, String errorText) {
+  TextFormField customTouristNameAndSurnameTextFormField(Key key, TextEditingController controller, String text) {
     return TextFormField(
-      controller: nameController,
+      controller: controller,
       key: key,
-      // validator: (value) {
-      //   if (value == null || value.isEmpty) {
-      //     return 'Пожалуйста заполните поле';
-      //   }
-      //   return null;
-      // },
-      onChanged: (value) {
-        setState(() {
-          if (value.contains(' ')) {
-            errorText = 'Не используйте пробелы';
-          } else {
-            errorText = '';
-          }
-        });
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Пожалуйста заполните поле';
+        }
+        if (value.length < 4) {
+          return 'Слишком мало букв';
+        }
+        return null;
+      },
+      onChanged: (text) {
+        setState(() => _name = text);
       },
       inputFormatters: [
         FilteringTextInputFormatter.singleLineFormatter,
       ],
       keyboardType: TextInputType.name,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(text, errorText),
+      decoration: textFormFieldDecorationWidget(text),
     );
   }
 
@@ -449,7 +439,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ],
       keyboardType: type,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(textFormField, errorText),
+      decoration: textFormFieldDecorationWidget(textFormField),
     );
   }
 }
@@ -479,9 +469,9 @@ String? birthDateValidator(String value) {
   return null;
 }
 
-InputDecoration textFormFieldDecorationWidget(String text, String errorText) {
+InputDecoration textFormFieldDecorationWidget(String text) {
   return InputDecoration(
-    errorText: errorText.isEmpty ? null : errorText,
+    // errorText: errorText.isEmpty ? null : errorText,
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       borderSide: BorderSide(color: Colors.transparent),
