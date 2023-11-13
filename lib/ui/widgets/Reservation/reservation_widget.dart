@@ -99,10 +99,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     final phoneFormKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
-    final String tourPrice = "${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}";
-    final String fuelCharge = reservation.fuelCharge.toString();
-    final String serviceCharge = reservation.serviceCharge.toString();
-    final String payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge).toString();
+    final String tourPrice = '${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}';
+    final String fuelCharge = '${reservation.fuelCharge.toStringAsFixed(4).substring(0, 1)} ${reservation.fuelCharge.toStringAsFixed(4).substring(1, 4)}';
+    final String serviceCharge = '${reservation.serviceCharge.toStringAsFixed(4).substring(0, 1)} ${reservation.serviceCharge.toStringAsFixed(4).substring(1, 4)}';
+    final payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge);
+    final String payableWithFormatter = '${payable.toStringAsFixed(4).substring(0, 3)} ${payable.toStringAsFixed(4).substring(3, 6)}';
 
     String email;
 
@@ -415,7 +416,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   const SizedBox(height: 10.0),
                   ReservationTourPricesTextWidget(header: 'Сервисный сбор', amount: '$serviceCharge ₽', color: Colors.black),
                   const SizedBox(height: 10.0),
-                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$payable ₽', color: AppColors.roomDetailsTextColor),
+                  ReservationTourPricesTextWidget(header: 'К оплате', amount: '$payableWithFormatter ₽', color: AppColors.roomDetailsTextColor),
                   const SizedBox(height: 10.0),
                 ],
               ),
@@ -424,7 +425,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        text: 'Оплатить $payable ₽',
+        text: 'Оплатить $payableWithFormatter ₽',
         onPressed: () {
           if (Keys.nameKey.currentState == null &&
               Keys.surnameKey.currentState == null &&
@@ -504,7 +505,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 }
-
 
 String? birthDateValidator(String value) {
   final DateTime now = DateTime.now();
