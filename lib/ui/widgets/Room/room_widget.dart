@@ -224,7 +224,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const ReservationWidget(),
+                                          builder: (context) => ReservationWidget(onSubmit: (value) => print(value)),
                                         ),
                                       );
                                       // Navigator.push(context, MaterialPageRoute(builder: (context) => const SubmitPage()));

@@ -22,7 +22,9 @@ import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
-  const ReservationWidget({super.key});
+  const ReservationWidget({super.key, required this.onSubmit});
+
+  final ValueChanged<String> onSubmit;
 
   @override
   State<ReservationWidget> createState() => _ReservationWidgetState();
@@ -90,18 +92,32 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     });
   }
 
+  bool _submitted = false;
+  String _name = '';
+
+  void _submit() {
+    setState(() => _submitted = true);
+    if (Keys.nameKey.currentState != null) {
+      widget.onSubmit(_name);
+    }
+    // if (Keys.nameKey.currentState!.validate()) {
+    //   widget.onSubmit(_name);
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isError = false;
     bool isButtonPressed = false;
     final mobileFormatter = PhoneNumberTextInputFormatter();
-    final emailFormKey = GlobalKey<FormState>();
-    final phoneFormKey = GlobalKey<FormState>();
+    // final emailFormKey = GlobalKey<FormState>();
+    // final phoneFormKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
     final String tourPrice = '${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}';
     final String fuelCharge = '${reservation.fuelCharge.toStringAsFixed(4).substring(0, 1)} ${reservation.fuelCharge.toStringAsFixed(4).substring(1, 4)}';
-    final String serviceCharge = '${reservation.serviceCharge.toStringAsFixed(4).substring(0, 1)} ${reservation.serviceCharge.toStringAsFixed(4).substring(1, 4)}';
+    final String serviceCharge =
+        '${reservation.serviceCharge.toStringAsFixed(4).substring(0, 1)} ${reservation.serviceCharge.toStringAsFixed(4).substring(1, 4)}';
     final payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge);
     final String payableWithFormatter = '${payable.toStringAsFixed(4).substring(0, 3)} ${payable.toStringAsFixed(4).substring(3, 6)}';
 
@@ -219,84 +235,84 @@ class _ReservationWidgetState extends State<ReservationWidget> {
             ),
           ),
           // information about customer
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const HeadlineTextWidget(text: 'Информация о покупателе'),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    controller: phoneController,
-                    key: phoneFormKey,
-                    validator: (value) {
-                      if (!isButtonPressed) {
-                        return null;
-                      }
-                      isError = true;
-                      if (value!.isEmpty) {
-                        return 'Поле обязательно для заполнения';
-                      } else {
-                        return 'Неверный номер';
-                      }
-                      isError = false;
-                    },
-                    onChanged: (value) {
-                      isButtonPressed = false;
-                      if (isError) {
-                        phoneFormKey.currentState?.validate();
-                      }
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      // maskFormatter,
-                      mobileFormatter,
-                      // _newMobileFormatter,
-                    ],
-                    maxLength: 17,
-                    keyboardType: TextInputType.phone,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Номер телефона',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    key: emailFormKey,
-                    validator: validateEmail,
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      labelText: 'Почта',
-                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  const SizedBox(height: 5.0),
-                  const Text(
-                    'Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту',
-                    style: TextStyle(color: AppColors.greyText, fontSize: 14, fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   decoration: const BoxDecoration(
+          //     color: Colors.white,
+          //     borderRadius: BorderRadius.all(Radius.circular(12)),
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         const HeadlineTextWidget(text: 'Информация о покупателе'),
+          //         const SizedBox(height: 10.0),
+          //         TextFormField(
+          //           autovalidateMode: AutovalidateMode.always,
+          //           controller: phoneController,
+          //           key: phoneFormKey,
+          //           validator: (value) {
+          //             if (!isButtonPressed) {
+          //               return null;
+          //             }
+          //             isError = true;
+          //             if (value!.isEmpty) {
+          //               return 'Поле обязательно для заполнения';
+          //             } else {
+          //               return 'Неверный номер';
+          //             }
+          //             isError = false;
+          //           },
+          //           onChanged: (value) {
+          //             isButtonPressed = false;
+          //             if (isError) {
+          //               phoneFormKey.currentState?.validate();
+          //             }
+          //           },
+          //           inputFormatters: [
+          //             FilteringTextInputFormatter.digitsOnly,
+          //             // maskFormatter,
+          //             mobileFormatter,
+          //             // _newMobileFormatter,
+          //           ],
+          //           maxLength: 17,
+          //           keyboardType: TextInputType.phone,
+          //           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          //           decoration: const InputDecoration(
+          //             border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.all(Radius.circular(10)),
+          //             ),
+          //             labelText: 'Номер телефона',
+          //             labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+          //           ),
+          //         ),
+          //         const SizedBox(height: 10.0),
+          //         // TextFormField(
+          //         //   autovalidateMode: AutovalidateMode.always,
+          //         //   key: emailFormKey,
+          //         //   validator: validateEmail,
+          //         //   onChanged: (value) {
+          //         //     email = value;
+          //         //   },
+          //         //   keyboardType: TextInputType.emailAddress,
+          //         //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          //         //   decoration: const InputDecoration(
+          //         //     border: OutlineInputBorder(
+          //         //       borderRadius: BorderRadius.all(Radius.circular(10)),
+          //         //     ),
+          //         //     labelText: 'Почта',
+          //         //     labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+          //         //   ),
+          //         // ),
+          //         const SizedBox(height: 5.0),
+          //         const Text(
+          //           'Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту',
+          //           style: TextStyle(color: AppColors.greyText, fontSize: 14, fontWeight: FontWeight.w400),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           // first customer
           const SizedBox(height: 10.0),
           Container(
@@ -329,47 +345,50 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя'),
+                          Form(
+                            key: Keys.nameKey,
+                            child: customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя', false),
+                          ),
                           const SizedBox(height: 10.0),
-                          customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
-                          const SizedBox(height: 10.0),
+                          // customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
+                          // const SizedBox(height: 10.0),
                           // Дата рождения
-                          customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
-                          const SizedBox(height: 10.0),
+                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
+                          // const SizedBox(height: 10.0),
                           // Citizenship
-                          TextFormField(
-                            key: Keys.citizenshipKey,
-                            validator: (value) {
-                              return null;
-                            },
-                            onChanged: (value) {},
-                            inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                            decoration: textFormFieldDecorationWidget('Гражданство'),
-                          ),
-                          const SizedBox(height: 10.0),
+                          // TextFormField(
+                          //   key: Keys.citizenshipKey,
+                          //   validator: (value) {
+                          //     return null;
+                          //   },
+                          //   onChanged: (value) {},
+                          //   inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
+                          //   keyboardType: TextInputType.number,
+                          //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          //   decoration: textFormFieldDecorationWidget('Гражданство'),
+                          // ),
+                          // const SizedBox(height: 10.0),
                           // Passport number
-                          TextFormField(
-                            // focusNode: node,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            key: Keys.passportNumber,
-                            validator: (value) {
-                              return null;
-                            },
-                            onChanged: (value) {},
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(11),
-                              FilteringTextInputFormatter.singleLineFormatter,
-                              passportFormatter,
-                            ],
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                            decoration: textFormFieldDecorationWidget('Номер паспорта'),
-                          ),
-                          const SizedBox(height: 10.0),
-                          customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
-                          const SizedBox(height: 10.0),
+                          // TextFormField(
+                          // focusNode: node,
+                          // autovalidateMode: AutovalidateMode.onUserInteraction,
+                          // key: Keys.passportNumber,
+                          // validator: (value) {
+                          //   return null;
+                          // },
+                          // onChanged: (value) {},
+                          // inputFormatters: [
+                          //   LengthLimitingTextInputFormatter(11),
+                          //   FilteringTextInputFormatter.singleLineFormatter,
+                          //   passportFormatter,
+                          // ],
+                          // keyboardType: TextInputType.number,
+                          // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          // decoration: textFormFieldDecorationWidget('Номер паспорта'),
+                          // ),
+                          // const SizedBox(height: 10.0),
+                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
+                          // const SizedBox(height: 10.0),
                         ],
                       ),
                     ],
@@ -426,18 +445,20 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         text: 'Оплатить $payableWithFormatter ₽',
-        onPressed: () {
-          if (Keys.nameKey.currentState == null &&
-              Keys.surnameKey.currentState == null &&
-              Keys.birthdayKey.currentState == null &&
-              Keys.citizenshipKey.currentState == null &&
-              Keys.passportNumber.currentState == null &&
-              Keys.passportValidityPeriod.currentState == null) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
-          } else {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
-          }
-        },
+        // onPressed: () {
+
+        // if (Keys.nameKey.currentState == null &&
+        //     Keys.surnameKey.currentState == null &&
+        //     Keys.birthdayKey.currentState == null &&
+        //     Keys.citizenshipKey.currentState == null &&
+        //     Keys.passportNumber.currentState == null &&
+        //     Keys.passportValidityPeriod.currentState == null) {
+        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
+        // } else {
+        //   Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+        // }
+        onPressed: _name.isNotEmpty ? _submit : null,
+        // },
       ),
     );
   }
@@ -461,17 +482,21 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text) {
+  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text, bool submitted) {
     return TextFormField(
+      autovalidateMode: submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
       // controller: nameController,
-      key: key,
+      // key: key,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Пожалуйста заполните поле';
         }
+        if (value.length < 4) {
+          return 'Слишком короткое имя';
+        }
         return null;
       },
-      onChanged: (value) {},
+      onChanged: (value) => setState(() => _name = value),
       inputFormatters: [
         FilteringTextInputFormatter.singleLineFormatter,
       ],
