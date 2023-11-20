@@ -10,14 +10,12 @@ import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
-import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_black_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_grey_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
-import 'package:hotel_app/ui/widgets/Reservation/components/upper_case_text_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -86,6 +84,16 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     'Десятый турист'
   ];
 
+  List<dynamic> listOfNameKeys = <dynamic>[
+    Keys.nameKey1,
+    Keys.nameKey2,
+    Keys.nameKey3,
+    Keys.nameKey4,
+    Keys.nameKey5,
+    Keys.nameKey6,
+    Keys.nameKey7,
+  ];
+
   void addTourist() {
     setState(() {
       names.insert(1, listOfTourists[1]);
@@ -97,7 +105,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   void _submit() {
     setState(() => _submitted = true);
-    if (Keys.nameKey.currentState != null) {
+    if (Keys.nameKey1.currentState != null) {
       widget.onSubmit(_name);
     }
     // if (Keys.nameKey.currentState!.validate()) {
@@ -110,8 +118,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     bool isError = false;
     bool isButtonPressed = false;
     final mobileFormatter = PhoneNumberTextInputFormatter();
-    // final emailFormKey = GlobalKey<FormState>();
-    // final phoneFormKey = GlobalKey<FormState>();
+    final emailFormKey = GlobalKey<FormState>();
+    final phoneFormKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
     final String tourPrice = '${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}';
@@ -346,8 +354,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       Column(
                         children: [
                           Form(
-                            key: Keys.nameKey,
-                            child: customTouristNameAndSurnameTextFormField(Keys.nameKey, 'Имя', false),
+                            key: listOfNameKeys[index],
+                            child: customTouristNameAndSurnameTextFormField('Имя', false),
                           ),
                           const SizedBox(height: 10.0),
                           // customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
@@ -482,11 +490,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(Key key, String text, bool submitted) {
+  TextFormField customTouristNameAndSurnameTextFormField(String text, bool submitted) {
     return TextFormField(
       autovalidateMode: submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
       // controller: nameController,
-      // key: key,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Пожалуйста заполните поле';
