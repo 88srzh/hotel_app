@@ -243,84 +243,84 @@ class _ReservationWidgetState extends State<ReservationWidget> {
             ),
           ),
           // information about customer
-          // Container(
-          //   decoration: const BoxDecoration(
-          //     color: Colors.white,
-          //     borderRadius: BorderRadius.all(Radius.circular(12)),
-          //   ),
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          //     child: Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         const HeadlineTextWidget(text: 'Информация о покупателе'),
-          //         const SizedBox(height: 10.0),
-          //         TextFormField(
-          //           autovalidateMode: AutovalidateMode.always,
-          //           controller: phoneController,
-          //           key: phoneFormKey,
-          //           validator: (value) {
-          //             if (!isButtonPressed) {
-          //               return null;
-          //             }
-          //             isError = true;
-          //             if (value!.isEmpty) {
-          //               return 'Поле обязательно для заполнения';
-          //             } else {
-          //               return 'Неверный номер';
-          //             }
-          //             isError = false;
-          //           },
-          //           onChanged: (value) {
-          //             isButtonPressed = false;
-          //             if (isError) {
-          //               phoneFormKey.currentState?.validate();
-          //             }
-          //           },
-          //           inputFormatters: [
-          //             FilteringTextInputFormatter.digitsOnly,
-          //             // maskFormatter,
-          //             mobileFormatter,
-          //             // _newMobileFormatter,
-          //           ],
-          //           maxLength: 17,
-          //           keyboardType: TextInputType.phone,
-          //           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-          //           decoration: const InputDecoration(
-          //             border: OutlineInputBorder(
-          //               borderRadius: BorderRadius.all(Radius.circular(10)),
-          //             ),
-          //             labelText: 'Номер телефона',
-          //             labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-          //           ),
-          //         ),
-          //         const SizedBox(height: 10.0),
-          //         // TextFormField(
-          //         //   autovalidateMode: AutovalidateMode.always,
-          //         //   key: emailFormKey,
-          //         //   validator: validateEmail,
-          //         //   onChanged: (value) {
-          //         //     email = value;
-          //         //   },
-          //         //   keyboardType: TextInputType.emailAddress,
-          //         //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-          //         //   decoration: const InputDecoration(
-          //         //     border: OutlineInputBorder(
-          //         //       borderRadius: BorderRadius.all(Radius.circular(10)),
-          //         //     ),
-          //         //     labelText: 'Почта',
-          //         //     labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-          //         //   ),
-          //         // ),
-          //         const SizedBox(height: 5.0),
-          //         const Text(
-          //           'Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту',
-          //           style: TextStyle(color: AppColors.greyText, fontSize: 14, fontWeight: FontWeight.w400),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const HeadlineTextWidget(text: 'Информация о покупателе'),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    controller: phoneController,
+                    key: phoneFormKey,
+                    validator: (value) {
+                      if (!isButtonPressed) {
+                        return null;
+                      }
+                      isError = true;
+                      if (value!.isEmpty) {
+                        return 'Поле обязательно для заполнения';
+                      } else {
+                        return 'Неверный номер';
+                      }
+                      isError = false;
+                    },
+                    onChanged: (value) {
+                      isButtonPressed = false;
+                      if (isError) {
+                        phoneFormKey.currentState?.validate();
+                      }
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      // maskFormatter,
+                      mobileFormatter,
+                      // _newMobileFormatter,
+                    ],
+                    maxLength: 17,
+                    keyboardType: TextInputType.phone,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Номер телефона',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    key: emailFormKey,
+                    validator: validateEmail,
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      labelText: 'Почта',
+                      labelStyle: TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  const Text(
+                    'Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту',
+                    style: TextStyle(color: AppColors.greyText, fontSize: 14, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+            ),
+          ),
           // first customer
           const SizedBox(height: 10.0),
           Container(
