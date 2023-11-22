@@ -94,6 +94,16 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     Keys.nameKey7,
   ];
 
+  List<dynamic> listOfSurname = <dynamic>[
+    Keys.surnameKey1,
+    Keys.surnameKey2,
+    Keys.surnameKey3,
+    Keys.surnameKey4,
+    Keys.surnameKey5,
+    Keys.surnameKey6,
+    Keys.surnameKey7,
+  ];
+
   void addTourist() {
     setState(() {
       names.insert(1, listOfTourists[1]);
@@ -102,6 +112,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   bool _submitted = false;
   String _name = '';
+  String surname = '';
 
   void _submit() {
     setState(() => _submitted = true);
@@ -360,31 +371,21 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          Form(
-                            key: listOfNameKeys[index],
-                            child: TextFormField(
-                              autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                              // controller: nameController,
-                              // validator: (value) {
-                              //   if (value == null || value.isEmpty) {
-                              //     return 'Пожалуйста заполните поле';
-                              //   }
-                              //   if (value.length < 4) {
-                              //     return 'Слишком короткое имя';
-                              //   }
-                              //   return null;
-                              // },
-                              validator: validateNameAndSurname,
-                              onChanged: (value) => setState(() => _name = value),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.singleLineFormatter,
-                              ],
-                              keyboardType: TextInputType.name,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                              decoration: textFormFieldDecorationWidget('123'),
-                            ),
-                            // child: customTouristNameAndSurnameTextFormField('Имя', false),
-                          ),
+                          customTouristNameAndSurnameTextFormField(
+                              listOfNameKeys, index, validateNameAndSurname, 'Имя', (value) => setState(() => _name = value!)),
+                          // TextFormField(
+                          //   autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                          //   controller: nameController,
+                          // key: listOfNameKeys[index],
+                          // validator: validateNameAndSurname,
+                          // onChanged: (value) => setState(() => _name = value),
+                          // inputFormatters: [
+                          //   FilteringTextInputFormatter.singleLineFormatter,
+                          // ],
+                          // keyboardType: TextInputType.name,
+                          // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          // decoration: textFormFieldDecorationWidget('Имя'),
+                          // ),
                           const SizedBox(height: 10.0),
                           // customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
                           // const SizedBox(height: 10.0),
@@ -518,29 +519,21 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(String text, bool submitted) {
+  TextFormField customTouristNameAndSurnameTextFormField(
+      List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title, ValueChanged<String?> onChanged) {
     return TextFormField(
-      autovalidateMode: submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+      autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
       // controller: nameController,
-      // validator: (value) {
-      //   if (value == null || value.isEmpty) {
-      //     return 'Пожалуйста заполните поле';
-      //   }
-      //   if (value.length < 4) {
-      //     return 'Слишком короткое имя';
-      //   }
-      //   return null;
-      // },
-      validator: (value) {
-        value = text;
-      },
-      onChanged: (value) => setState(() => _name = value),
+      key: listKey[index],
+      validator: validator,
+      onChanged: onChanged,
+      // onChanged: (value) => setState(() => variable = value),
       inputFormatters: [
         FilteringTextInputFormatter.singleLineFormatter,
       ],
       keyboardType: TextInputType.name,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(text),
+      decoration: textFormFieldDecorationWidget(title),
     );
   }
 
