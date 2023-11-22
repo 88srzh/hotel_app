@@ -150,11 +150,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       return value!.isNotEmpty && !regex.hasMatch(value) ? 'Enter a valid email address' : null;
     }
 
-    String? validateName(String? value) {
-      if (value!.length < 4) {
-        return 'Слишком короткое имя';
+    String? validateNameAndSurname(String? value) {
+      if (value!.contains(RegExp(r'[0-9]'))) {
+        return 'Не может содержать цифры';
       }
-      return value.isNotEmpty ? 'nice' : null;
+      return null;
     }
 
     return Scaffold(
@@ -344,93 +344,90 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 itemCount: names.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ExpansionTile(
-                      backgroundColor: Colors.transparent,
-                      shape: const Border(),
-                      onExpansionChanged: (bool expanded) {
-                        setState(() {
-                          customTileExpanded = expanded;
-                        });
-                      },
-                      trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
-                      tilePadding: const EdgeInsets.all(0),
-                      title: Text(
-                        listOfTourists[index],
-                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                      ),
-                      children: [
-                  Column(
-                  children: [
-                  Form(
-                  key: listOfNameKeys[index],
-                      child: TextFormField(
-                        autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                        // controller: nameController,
-                        // validator: (value) {
-                        //   if (value == null || value.isEmpty) {
-                        //     return 'Пожалуйста заполните поле';
-                        //   }
-                        //   if (value.length < 4) {
-                        //     return 'Слишком короткое имя';
-                        //   }
-                        //   return null;
-                        // },
-                        validator: validateName,
-                        onChanged: (value) => setState(() => _name = value),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.singleLineFormatter,
+                    backgroundColor: Colors.transparent,
+                    shape: const Border(),
+                    onExpansionChanged: (bool expanded) {
+                      setState(() {
+                        customTileExpanded = expanded;
+                      });
+                    },
+                    trailing: customTileExpanded ? Image.asset(AppImages.upArrow) : Image.asset(AppImages.downArrow),
+                    tilePadding: const EdgeInsets.all(0),
+                    title: Text(
+                      listOfTourists[index],
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                    ),
+                    children: [
+                      Column(
+                        children: [
+                          Form(
+                            key: listOfNameKeys[index],
+                            child: TextFormField(
+                              autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                              // controller: nameController,
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Пожалуйста заполните поле';
+                              //   }
+                              //   if (value.length < 4) {
+                              //     return 'Слишком короткое имя';
+                              //   }
+                              //   return null;
+                              // },
+                              validator: validateNameAndSurname,
+                              onChanged: (value) => setState(() => _name = value),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                              ],
+                              keyboardType: TextInputType.name,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                              decoration: textFormFieldDecorationWidget('123'),
+                            ),
+                            // child: customTouristNameAndSurnameTextFormField('Имя', false),
+                          ),
+                          const SizedBox(height: 10.0),
+                          // customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
+                          // const SizedBox(height: 10.0),
+                          // Дата рождения
+                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
+                          // const SizedBox(height: 10.0),
+                          // Citizenship
+                          // TextFormField(
+                          //   key: Keys.citizenshipKey,
+                          //   validator: (value) {
+                          //     return null;
+                          //   },
+                          //   onChanged: (value) {},
+                          //   inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
+                          //   keyboardType: TextInputType.number,
+                          //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          //   decoration: textFormFieldDecorationWidget('Гражданство'),
+                          // ),
+                          // const SizedBox(height: 10.0),
+                          // Passport number
+                          // TextFormField(
+                          // focusNode: node,
+                          // autovalidateMode: AutovalidateMode.onUserInteraction,
+                          // key: Keys.passportNumber,
+                          // validator: (value) {
+                          //   return null;
+                          // },
+                          // onChanged: (value) {},
+                          // inputFormatters: [
+                          //   LengthLimitingTextInputFormatter(11),
+                          //   FilteringTextInputFormatter.singleLineFormatter,
+                          //   passportFormatter,
+                          // ],
+                          // keyboardType: TextInputType.number,
+                          // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          // decoration: textFormFieldDecorationWidget('Номер паспорта'),
+                          // ),
+                          // const SizedBox(height: 10.0),
+                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
+                          // const SizedBox(height: 10.0),
                         ],
-                        keyboardType: TextInputType.name,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                        decoration: textFormFieldDecorationWidget('123'),
                       ),
-                      // child: customTouristNameAndSurnameTextFormField('Имя', false),
-                  ),
-                  const SizedBox(height: 10.0),
-                  // customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
-                  // const SizedBox(height: 10.0),
-                  // Дата рождения
-                  // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
-                  // const SizedBox(height: 10.0),
-                  // Citizenship
-                  // TextFormField(
-                  //   key: Keys.citizenshipKey,
-                  //   validator: (value) {
-                  //     return null;
-                  //   },
-                  //   onChanged: (value) {},
-                  //   inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
-                  //   keyboardType: TextInputType.number,
-                  //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                  //   decoration: textFormFieldDecorationWidget('Гражданство'),
-                  // ),
-                  // const SizedBox(height: 10.0),
-                  // Passport number
-                  // TextFormField(
-                  // focusNode: node,
-                  // autovalidateMode: AutovalidateMode.onUserInteraction,
-                  // key: Keys.passportNumber,
-                  // validator: (value) {
-                  //   return null;
-                  // },
-                  // onChanged: (value) {},
-                  // inputFormatters: [
-                  //   LengthLimitingTextInputFormatter(11),
-                  //   FilteringTextInputFormatter.singleLineFormatter,
-                  //   passportFormatter,
-                  // ],
-                  // keyboardType: TextInputType.number,
-                  // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                  // decoration: textFormFieldDecorationWidget('Номер паспорта'),
-                  // ),
-                  // const SizedBox(height: 10.0),
-                  // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
-                  // const SizedBox(height: 10.0),
-                  ]
-                  ,
-                  )
-                  ,
-                  ]
-                  ,
+                    ],
                   );
                 },
               ),
@@ -534,7 +531,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       //   }
       //   return null;
       // },
-      validator: (value){
+      validator: (value) {
         value = text;
       },
       onChanged: (value) => setState(() => _name = value),
