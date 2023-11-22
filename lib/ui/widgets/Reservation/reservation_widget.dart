@@ -22,7 +22,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key, required this.onSubmit});
 
-  final ValueChanged<String> onSubmit;
+  final ValueChanged<List<String>> onSubmit;
 
   @override
   State<ReservationWidget> createState() => _ReservationWidgetState();
@@ -84,24 +84,26 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     'Десятый турист'
   ];
 
-  List<dynamic> listOfNameKeys = <dynamic>[
-    Keys.nameKey1,
-    Keys.nameKey2,
-    Keys.nameKey3,
-    Keys.nameKey4,
-    Keys.nameKey5,
-    Keys.nameKey6,
-    Keys.nameKey7,
-  ];
+  List<dynamic> listOfNameKeys = <dynamic>[Keys.nameKey1, Keys.nameKey2, Keys.nameKey3, Keys.nameKey4, Keys.nameKey5, Keys.nameKey6, Keys.nameKey7];
 
-  List<dynamic> listOfSurname = <dynamic>[
+  List<dynamic> listOfSurnameKeys = <dynamic>[
     Keys.surnameKey1,
     Keys.surnameKey2,
     Keys.surnameKey3,
     Keys.surnameKey4,
     Keys.surnameKey5,
     Keys.surnameKey6,
-    Keys.surnameKey7,
+    Keys.surnameKey7
+  ];
+
+  List<dynamic> listOfBirthdayKeys = <dynamic>[
+    Keys.birthdayKey1,
+    Keys.birthdayKey2,
+    Keys.birthdayKey3,
+    Keys.birthdayKey4,
+    Keys.birthdayKey5,
+    Keys.birthdayKey6,
+    Keys.birthdayKey7
   ];
 
   void addTourist() {
@@ -112,12 +114,13 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   bool _submitted = false;
   String _name = '';
-  String surname = '';
+  String _surname = '';
+  String _birthday = '';
 
   void _submit() {
     setState(() => _submitted = true);
-    if (Keys.nameKey1.currentState != null) {
-      widget.onSubmit(_name);
+    if (Keys.nameKey1.currentState != null && Keys.surnameKey1.currentState != null) {
+      widget.onSubmit([_name, _surname]);
     }
     // if (Keys.nameKey.currentState!.validate()) {
     //   widget.onSubmit(_name);
@@ -373,25 +376,14 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                         children: [
                           customTouristNameAndSurnameTextFormField(
                               listOfNameKeys, index, validateNameAndSurname, 'Имя', (value) => setState(() => _name = value!)),
-                          // TextFormField(
-                          //   autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                          //   controller: nameController,
-                          // key: listOfNameKeys[index],
-                          // validator: validateNameAndSurname,
-                          // onChanged: (value) => setState(() => _name = value),
-                          // inputFormatters: [
-                          //   FilteringTextInputFormatter.singleLineFormatter,
-                          // ],
-                          // keyboardType: TextInputType.name,
-                          // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                          // decoration: textFormFieldDecorationWidget('Имя'),
-                          // ),
                           const SizedBox(height: 10.0),
-                          // customTouristNameAndSurnameTextFormField(Keys.surnameKey, 'Фамилия'),
-                          // const SizedBox(height: 10.0),
+                          customTouristNameAndSurnameTextFormField(
+                              listOfSurnameKeys, index, validateNameAndSurname, 'Фамилия', (value) => setState(() => _surname = value!)),
+                          const SizedBox(height: 10.0),
                           // Дата рождения
-                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.birthdayKey, 'Дата рождения'),
-                          // const SizedBox(height: 10.0),
+                          customTouristBirthdayAndPassportValidatePeriodTextFormField(
+                              listOfBirthdayKeys, index, birthdayValidator, 'Дата рождения', (value) => setState(() => _birthday = value!)),
+                          const SizedBox(height: 10.0),
                           // Citizenship
                           // TextFormField(
                           //   key: Keys.citizenshipKey,
@@ -494,20 +486,18 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         // } else {
         //   Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
         // }
-        onPressed: _name.isNotEmpty ? _submit : null,
+        onPressed: _name.isNotEmpty && _surname.isNotEmpty && _birthday.isNotEmpty ? _submit : null,
         // },
       ),
     );
   }
 
-  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(Key key, String text) {
+  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(
+      List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title, ValueChanged<String?> onChanged) {
     return TextFormField(
-      key: key,
-      validator: (value) {
-        // TODO validator don't work
-        return birthDateValidator(value!);
-      },
-      onChanged: (value) {},
+      key: listKey[index],
+      validator: validator,
+      onChanged: onChanged,
       inputFormatters: [
         LengthLimitingTextInputFormatter(10),
         FilteringTextInputFormatter.singleLineFormatter,
@@ -515,7 +505,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       ],
       keyboardType: TextInputType.number,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(text),
+      decoration: textFormFieldDecorationWidget(title),
     );
   }
 
@@ -562,11 +552,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   }
 }
 
-String? birthDateValidator(String value) {
+String? birthdayValidator(String? value) {
   final DateTime now = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy');
   final String formatted = formatter.format(now);
-  String str1 = value;
+  String str1 = value!;
   List<String> str2 = str1.split('/');
   String month = str2.isNotEmpty ? str2[0] : '';
   String day = str2.length > 1 ? str2[1] : '';
