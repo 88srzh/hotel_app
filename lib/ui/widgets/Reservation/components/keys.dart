@@ -22,7 +22,13 @@ class Keys {
   static final birthdayKey5 = GlobalKey<FormState>();
   static final birthdayKey6 = GlobalKey<FormState>();
   static final birthdayKey7 = GlobalKey<FormState>();
-  static final citizenshipKey = GlobalKey<FormState>();
+  static final citizenshipKey1 = GlobalKey<FormState>();
+  static final citizenshipKey2 = GlobalKey<FormState>();
+  static final citizenshipKey3 = GlobalKey<FormState>();
+  static final citizenshipKey4 = GlobalKey<FormState>();
+  static final citizenshipKey5 = GlobalKey<FormState>();
+  static final citizenshipKey6 = GlobalKey<FormState>();
+  static final citizenshipKey7 = GlobalKey<FormState>();
   static final passportNumber = GlobalKey<FormState>();
   static final passportValidityPeriod = GlobalKey<FormState>();
 }

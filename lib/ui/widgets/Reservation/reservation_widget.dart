@@ -16,6 +16,7 @@ import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_in
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_black_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_grey_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
+import 'package:hotel_app/ui/widgets/Reservation/components/upper_case_text_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -106,6 +107,16 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     Keys.birthdayKey7
   ];
 
+  List<dynamic> listOfCitizenshipKey = <dynamic>[
+    Keys.citizenshipKey1,
+    Keys.citizenshipKey2,
+    Keys.citizenshipKey3,
+    Keys.citizenshipKey4,
+    Keys.citizenshipKey5,
+    Keys.citizenshipKey6,
+    Keys.citizenshipKey7,
+  ];
+
   void addTourist() {
     setState(() {
       names.insert(1, listOfTourists[1]);
@@ -116,6 +127,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   String _name = '';
   String _surname = '';
   String _birthday = '';
+  String _citizenship = '';
 
   void _submit() {
     setState(() => _submitted = true);
@@ -166,7 +178,16 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
     String? validateNameAndSurname(String? value) {
       if (value!.contains(RegExp(r'[0-9]'))) {
-        return 'Не может содержать цифры';
+        return 'Поле не может содержать цифры';
+      }
+      return null;
+    }
+
+    String? validateCitizenship(String? value) {
+      if (value!.contains(RegExp(r'[0-9]'))) {
+        return 'Поле не может содержать цифры';
+      } else if (value.length > 2) {
+        return 'Не может быть более двух символов';
       }
       return null;
     }
@@ -375,15 +396,57 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       Column(
                         children: [
                           customTouristNameAndSurnameTextFormField(
-                              listOfNameKeys, index, validateNameAndSurname, 'Имя', (value) => setState(() => _name = value!)),
+                            listOfNameKeys,
+                            index,
+                            validateNameAndSurname,
+                            'Имя',
+                            (value) => setState(() => _name = value!),
+                            [FilteringTextInputFormatter.singleLineFormatter],
+                            TextInputType.name,
+                          ),
                           const SizedBox(height: 10.0),
                           customTouristNameAndSurnameTextFormField(
-                              listOfSurnameKeys, index, validateNameAndSurname, 'Фамилия', (value) => setState(() => _surname = value!)),
+                            listOfSurnameKeys,
+                            index,
+                            validateNameAndSurname,
+                            'Фамилия',
+                            (value) => setState(() => _surname = value!),
+                            [FilteringTextInputFormatter.singleLineFormatter],
+                            TextInputType.name,
+                          ),
                           const SizedBox(height: 10.0),
                           // Дата рождения
-                          customTouristBirthdayAndPassportValidatePeriodTextFormField(
-                              listOfBirthdayKeys, index, birthdayValidator, 'Дата рождения', (value) => setState(() => _birthday = value!)),
+                          customTouristNameAndSurnameTextFormField(
+                            listOfBirthdayKeys,
+                            index,
+                            birthdayValidator,
+                            'Дата рождения',
+                            (value) => setState(() => _birthday = value!),
+                            [
+                              LengthLimitingTextInputFormatter(10),
+                              FilteringTextInputFormatter.singleLineFormatter,
+                              BirthTextInputFormatter(),
+                            ],
+                            TextInputType.number,
+                          ),
+                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(listOfBirthdayKeys, index, birthdayValidator, 'Дата рождения',
+                          //         (value) => setState(() => _birthday = value!), TextInputType.number),
                           const SizedBox(height: 10.0),
+                          customTouristNameAndSurnameTextFormField(
+                            listOfCitizenshipKey,
+                            index,
+                            validateCitizenship,
+                            'Гражданство',
+                            (value) => setState(() => _citizenship = value!),
+                            [
+                              LengthLimitingTextInputFormatter(2),
+                              FilteringTextInputFormatter.singleLineFormatter,
+                              UpperCaseTextFormatter(),
+                            ],
+                            TextInputType.text,
+                          ),
+                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(
+                          //     listOfCitizenshipKey, index, (value) => null, title, (value) {}, textInputType)
                           // Citizenship
                           // TextFormField(
                           //   key: Keys.citizenshipKey,
@@ -493,7 +556,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   }
 
   TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(
-      List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title, ValueChanged<String?> onChanged) {
+      List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title, ValueChanged<String?> onChanged, TextInputType textInputType) {
     return TextFormField(
       key: listKey[index],
       validator: validator,
@@ -503,25 +566,25 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         FilteringTextInputFormatter.singleLineFormatter,
         BirthTextInputFormatter(),
       ],
-      keyboardType: TextInputType.number,
+      keyboardType: textInputType,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(title),
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(
-      List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title, ValueChanged<String?> onChanged) {
+  TextFormField customTouristNameAndSurnameTextFormField(List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title,
+      ValueChanged<String?> onChanged, List<TextInputFormatter>? inputFormatters, TextInputType textInputType) {
     return TextFormField(
       autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
       // controller: nameController,
       key: listKey[index],
       validator: validator,
       onChanged: onChanged,
-      // onChanged: (value) => setState(() => variable = value),
-      inputFormatters: [
-        FilteringTextInputFormatter.singleLineFormatter,
-      ],
-      keyboardType: TextInputType.name,
+      inputFormatters: inputFormatters,
+      // [
+      // FilteringTextInputFormatter.singleLineFormatter,
+      // ],
+      keyboardType: textInputType,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(title),
     );
