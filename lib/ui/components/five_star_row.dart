@@ -17,6 +17,7 @@ class FiveStarRowWidget extends StatelessWidget {
       height: 29.0,
       width: 153.0,
       decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
         color: AppColors.orangeBackground,
       ),
       child: Padding(

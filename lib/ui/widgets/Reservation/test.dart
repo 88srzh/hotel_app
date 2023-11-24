@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.indigo,
           textTheme: const TextTheme(
-            button: TextStyle(color: Colors.white),
+            labelLarge: TextStyle(color: Colors.white),
           )),
       home: const SubmitPage(),
     );
@@ -97,7 +97,7 @@ class _TextSubmitFormState extends State<TextSubmitForm> {
                 'Submit',
                 style: Theme.of(context)
                     .textTheme
-                    .headline6!
+                    .titleLarge!
                     .copyWith(color: Colors.white),
               ),
             ),

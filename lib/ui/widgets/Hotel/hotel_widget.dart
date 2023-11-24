@@ -219,8 +219,10 @@ class _HotelWidgetState extends State<HotelWidget> {
       for (var name in hotel.aboutTheHotel.peculiarities) {
         names.add(name.characters.string);
       }
-      texts.add(names.join('     '));
+      // texts.add(names.join('\n'));
+      texts.add(names.join('\n'));
     }
     return texts.join(' ');
+    // return myList.toString();
   }
 }
