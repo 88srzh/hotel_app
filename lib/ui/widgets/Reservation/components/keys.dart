@@ -29,6 +29,18 @@ class Keys {
   static final citizenshipKey5 = GlobalKey<FormState>();
   static final citizenshipKey6 = GlobalKey<FormState>();
   static final citizenshipKey7 = GlobalKey<FormState>();
-  static final passportNumber = GlobalKey<FormState>();
-  static final passportValidityPeriod = GlobalKey<FormState>();
+  static final passportNumber1 = GlobalKey<FormState>();
+  static final passportNumber2 = GlobalKey<FormState>();
+  static final passportNumber3 = GlobalKey<FormState>();
+  static final passportNumber4 = GlobalKey<FormState>();
+  static final passportNumber5 = GlobalKey<FormState>();
+  static final passportNumber6 = GlobalKey<FormState>();
+  static final passportNumber7 = GlobalKey<FormState>();
+  static final passportValidityPeriod1 = GlobalKey<FormState>();
+  static final passportValidityPeriod2 = GlobalKey<FormState>();
+  static final passportValidityPeriod3 = GlobalKey<FormState>();
+  static final passportValidityPeriod4 = GlobalKey<FormState>();
+  static final passportValidityPeriod5 = GlobalKey<FormState>();
+  static final passportValidityPeriod6 = GlobalKey<FormState>();
+  static final passportValidityPeriod7 = GlobalKey<FormState>();
 }

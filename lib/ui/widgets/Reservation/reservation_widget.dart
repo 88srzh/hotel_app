@@ -85,7 +85,15 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     'Десятый турист'
   ];
 
-  List<dynamic> listOfNameKeys = <dynamic>[Keys.nameKey1, Keys.nameKey2, Keys.nameKey3, Keys.nameKey4, Keys.nameKey5, Keys.nameKey6, Keys.nameKey7];
+  List<dynamic> listOfNameKeys = <dynamic>[
+    Keys.nameKey1,
+    Keys.nameKey2,
+    Keys.nameKey3,
+    Keys.nameKey4,
+    Keys.nameKey5,
+    Keys.nameKey6,
+    Keys.nameKey7,
+  ];
 
   List<dynamic> listOfSurnameKeys = <dynamic>[
     Keys.surnameKey1,
@@ -107,7 +115,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     Keys.birthdayKey7
   ];
 
-  List<dynamic> listOfCitizenshipKey = <dynamic>[
+  List<dynamic> listOfCitizenshipKeys = <dynamic>[
     Keys.citizenshipKey1,
     Keys.citizenshipKey2,
     Keys.citizenshipKey3,
@@ -115,6 +123,26 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     Keys.citizenshipKey5,
     Keys.citizenshipKey6,
     Keys.citizenshipKey7,
+  ];
+
+  List<dynamic> listOfPassportNumberKeys = <dynamic>[
+    Keys.passportNumber1,
+    Keys.passportNumber2,
+    Keys.passportNumber3,
+    Keys.passportNumber4,
+    Keys.passportNumber5,
+    Keys.passportNumber6,
+    Keys.passportNumber7,
+  ];
+
+  List<dynamic> listOfPassportValidityPeriodKeys = <dynamic>[
+    Keys.passportValidityPeriod1,
+    Keys.passportValidityPeriod2,
+    Keys.passportValidityPeriod3,
+    Keys.passportValidityPeriod4,
+    Keys.passportValidityPeriod5,
+    Keys.passportValidityPeriod6,
+    Keys.passportValidityPeriod7,
   ];
 
   void addTourist() {
@@ -128,6 +156,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   String _surname = '';
   String _birthday = '';
   String _citizenship = '';
+  String _passportNumber = '';
+  String _validityPassportPeriod = '';
 
   void _submit() {
     setState(() => _submitted = true);
@@ -188,6 +218,13 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         return 'Поле не может содержать цифры';
       } else if (value.length > 2) {
         return 'Не может быть более двух символов';
+      }
+      return null;
+    }
+
+    String? validatePassportNumber(String? value) {
+      if (value!.length < 11) {
+        return 'Должно быть 10 цифр';
       }
       return null;
     }
@@ -395,90 +432,77 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     children: [
                       Column(
                         children: [
-                          customTouristNameAndSurnameTextFormField(
+                          customTouristsTextFormField(
                             listOfNameKeys,
                             index,
                             validateNameAndSurname,
                             'Имя',
-                            (value) => setState(() => _name = value!),
+                                (value) => setState(() => _name = value!),
                             [FilteringTextInputFormatter.singleLineFormatter],
                             TextInputType.name,
                           ),
                           const SizedBox(height: 10.0),
-                          customTouristNameAndSurnameTextFormField(
+                          customTouristsTextFormField(
                             listOfSurnameKeys,
                             index,
                             validateNameAndSurname,
                             'Фамилия',
-                            (value) => setState(() => _surname = value!),
+                                (value) => setState(() => _surname = value!),
                             [FilteringTextInputFormatter.singleLineFormatter],
                             TextInputType.name,
                           ),
                           const SizedBox(height: 10.0),
                           // Дата рождения
-                          customTouristNameAndSurnameTextFormField(
+                          customTouristsTextFormField(
                             listOfBirthdayKeys,
                             index,
                             birthdayValidator,
                             'Дата рождения',
-                            (value) => setState(() => _birthday = value!),
-                            [
-                              LengthLimitingTextInputFormatter(10),
-                              FilteringTextInputFormatter.singleLineFormatter,
-                              BirthTextInputFormatter(),
-                            ],
+                                (value) => setState(() => _birthday = value!),
+                            [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.singleLineFormatter, BirthTextInputFormatter()],
                             TextInputType.number,
                           ),
                           // customTouristBirthdayAndPassportValidatePeriodTextFormField(listOfBirthdayKeys, index, birthdayValidator, 'Дата рождения',
                           //         (value) => setState(() => _birthday = value!), TextInputType.number),
                           const SizedBox(height: 10.0),
-                          customTouristNameAndSurnameTextFormField(
-                            listOfCitizenshipKey,
+                          customTouristsTextFormField(
+                            listOfCitizenshipKeys,
                             index,
                             validateCitizenship,
                             'Гражданство',
-                            (value) => setState(() => _citizenship = value!),
-                            [
-                              LengthLimitingTextInputFormatter(2),
-                              FilteringTextInputFormatter.singleLineFormatter,
-                              UpperCaseTextFormatter(),
-                            ],
+                                (value) => setState(() => _citizenship = value!),
+                            [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
                             TextInputType.text,
                           ),
-                          // customTouristBirthdayAndPassportValidatePeriodTextFormField(
-                          //     listOfCitizenshipKey, index, (value) => null, title, (value) {}, textInputType)
-                          // Citizenship
-                          // TextFormField(
-                          //   key: Keys.citizenshipKey,
-                          //   validator: (value) {
-                          //     return null;
-                          //   },
-                          //   onChanged: (value) {},
-                          //   inputFormatters: [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
-                          //   keyboardType: TextInputType.number,
-                          //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                          //   decoration: textFormFieldDecorationWidget('Гражданство'),
-                          // ),
-                          // const SizedBox(height: 10.0),
+                          const SizedBox(height: 10.0),
                           // Passport number
-                          // TextFormField(
-                          // focusNode: node,
-                          // autovalidateMode: AutovalidateMode.onUserInteraction,
-                          // key: Keys.passportNumber,
-                          // validator: (value) {
-                          //   return null;
-                          // },
-                          // onChanged: (value) {},
-                          // inputFormatters: [
-                          //   LengthLimitingTextInputFormatter(11),
-                          //   FilteringTextInputFormatter.singleLineFormatter,
-                          //   passportFormatter,
-                          // ],
-                          // keyboardType: TextInputType.number,
-                          // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                          // decoration: textFormFieldDecorationWidget('Номер паспорта'),
-                          // ),
-                          // const SizedBox(height: 10.0),
+                          customTouristsTextFormField(
+                            listOfPassportNumberKeys,
+                            index,
+                            validatePassportNumber,
+                            'Номер загранпаспорта',
+                                // if enabled, it gives an error Invalid radix-10 number (at character 1)
+                                // (value) =>
+                                // setState(() {
+                                //   _passportNumber = value!;
+                                // }),
+                            (value) {},
+                            [LengthLimitingTextInputFormatter(11), FilteringTextInputFormatter.singleLineFormatter, passportFormatter],
+                            TextInputType.number,
+                          ),
+                          const SizedBox(height: 10.0),
+                          customTouristsTextFormField(
+                            listOfPassportValidityPeriodKeys,
+                            index,
+                            birthdayValidator,
+                            'Срок действия загранспаспорта',
+                                (value) =>
+                                setState(() {
+                                  _validityPassportPeriod = value!;
+                                }),
+                            [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.singleLineFormatter, BirthTextInputFormatter()],
+                            TextInputType.number,
+                          ),
                           // customTouristBirthdayAndPassportValidatePeriodTextFormField(Keys.passportValidityPeriod, 'Срок действия загранпаспорта'),
                           // const SizedBox(height: 10.0),
                         ],
@@ -555,8 +579,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
-  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(
-      List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title, ValueChanged<String?> onChanged, TextInputType textInputType) {
+  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(List<dynamic> listKey, int index, FormFieldValidator<String?> validator,
+      String title, ValueChanged<String?> onChanged, TextInputType textInputType) {
     return TextFormField(
       key: listKey[index],
       validator: validator,
@@ -572,7 +596,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     );
   }
 
-  TextFormField customTouristNameAndSurnameTextFormField(List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title,
+  TextFormField customTouristsTextFormField(List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title,
       ValueChanged<String?> onChanged, List<TextInputFormatter>? inputFormatters, TextInputType textInputType) {
     return TextFormField(
       autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
@@ -581,71 +605,44 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       validator: validator,
       onChanged: onChanged,
       inputFormatters: inputFormatters,
-      // [
-      // FilteringTextInputFormatter.singleLineFormatter,
-      // ],
       keyboardType: textInputType,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: textFormFieldDecorationWidget(title),
     );
   }
 
-  TextFormField customTouristTextFormField(String validate, String textFormField, GlobalKey key, TextInputType type) {
-    return TextFormField(
-      // controller: nameController,
-      key: key,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Поле не заполнено';
-        }
-        return null;
-      },
-      onChanged: (value) {
-        validate = value;
-      },
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(10),
-        FilteringTextInputFormatter.singleLineFormatter,
-        BirthTextInputFormatter(),
-      ],
-      keyboardType: type,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(textFormField),
+  String? birthdayValidator(String? value) {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy');
+    final String formatted = formatter.format(now);
+    String str1 = value!;
+    List<String> str2 = str1.split('/');
+    String month = str2.isNotEmpty ? str2[0] : '';
+    String day = str2.length > 1 ? str2[1] : '';
+    String year = str2.length > 2 ? str2[2] : '';
+    if (value.isEmpty) {
+      return 'Дата рождения не заполнена';
+    } else if (int.parse(month) > 13) {
+      return 'Неверно указан месяц';
+    } else if (int.parse(day) > 32) {
+      return 'Неверно указан день';
+    } else if ((int.parse(year) > int.parse(formatted))) {
+      return 'Неверно указан год';
+    } else if ((int.parse(year) < 1920)) {
+      return 'Неверно указан год';
+    }
+    return null;
+  }
+
+  InputDecoration textFormFieldDecorationWidget(String text) {
+    return InputDecoration(
+      // errorText: 'Поле обязательно для заполнения',
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderSide: BorderSide(color: Colors.transparent),
+      ),
+      labelText: text,
+      labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
     );
   }
-}
-
-String? birthdayValidator(String? value) {
-  final DateTime now = DateTime.now();
-  final DateFormat formatter = DateFormat('yyyy');
-  final String formatted = formatter.format(now);
-  String str1 = value!;
-  List<String> str2 = str1.split('/');
-  String month = str2.isNotEmpty ? str2[0] : '';
-  String day = str2.length > 1 ? str2[1] : '';
-  String year = str2.length > 2 ? str2[2] : '';
-  if (value.isEmpty) {
-    return 'Дата рождения не заполнена';
-  } else if (int.parse(month) > 13) {
-    return 'Неверно указан месяц';
-  } else if (int.parse(day) > 32) {
-    return 'Неверно указан день';
-  } else if ((int.parse(year) > int.parse(formatted))) {
-    return 'Неверно указан год';
-  } else if ((int.parse(year) < 1920)) {
-    return 'Неверно указан год';
-  }
-  return null;
-}
-
-InputDecoration textFormFieldDecorationWidget(String text) {
-  return InputDecoration(
-    // errorText: 'Поле обязательно для заполнения',
-    border: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(color: Colors.transparent),
-    ),
-    labelText: text,
-    labelStyle: const TextStyle(color: AppColors.formLabelTextColor, fontSize: 12, fontWeight: FontWeight.w400),
-  );
 }
