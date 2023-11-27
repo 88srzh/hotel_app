@@ -65,8 +65,14 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   bool customTileExpanded = false;
 
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _surnameController = TextEditingController();
+  final _birthdayController = TextEditingController();
+  final _citizenshipController = TextEditingController();
+  final _passwordNumberController = TextEditingController();
+  final _validityPassportPeriodController = TextEditingController();
 
   final List<Widget> expansionTileWidget = <Widget>[];
   final List<void> expansionTile = <void>[];
@@ -158,6 +164,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   String _citizenship = '';
   String _passportNumber = '';
   String _validityPassportPeriod = '';
+  String phone = '';
 
   void _submit() {
     setState(() => _submitted = true);
@@ -171,9 +178,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    bool isError = false;
-    bool isButtonPressed = false;
-    final mobileFormatter = PhoneNumberTextInputFormatter();
+    // bool isError = false;
+    // bool isButtonPressed = false;
+    // final mobileFormatter = PhoneNumberTextInputFormatter();
     final emailFormKey = GlobalKey<FormState>();
     final phoneFormKey = GlobalKey<FormState>();
 
@@ -187,11 +194,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
     String email;
 
-    var passportFormatter = MaskTextInputFormatter(
-      mask: '####-######',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy,
-    );
+    // var passportFormatter = MaskTextInputFormatter(
+    //   mask: '####-######',
+    //   filter: {"#": RegExp(r'[0-9]')},
+    //   type: MaskAutoCompletionType.lazy,
+    // );
 
     String? validateEmail(String? value) {
       const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
@@ -204,6 +211,12 @@ class _ReservationWidgetState extends State<ReservationWidget> {
       final regex = RegExp(pattern);
 
       return value!.isNotEmpty && !regex.hasMatch(value) ? 'Enter a valid email address' : null;
+    }
+
+    String? validatePhoneNumber(String? value) {
+      const phoneNumberPattern = '^(?:[+0]9)?[0-9]{10}';
+      final regex = RegExp(phoneNumberPattern);
+      return null;
     }
 
     String? validateNameAndSurname(String? value) {
@@ -223,7 +236,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     }
 
     String? validatePassportNumber(String? value) {
-      if (value!.length < 11) {
+      if (value!.length < 10) {
         return 'Должно быть 10 цифр';
       }
       return null;
@@ -338,31 +351,24 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                     autovalidateMode: AutovalidateMode.always,
                     controller: phoneController,
                     key: phoneFormKey,
-                    validator: (value) {
-                      if (!isButtonPressed) {
-                        return null;
-                      }
-                      isError = true;
-                      if (value!.isEmpty) {
-                        return 'Поле обязательно для заполнения';
-                      } else {
-                        return 'Неверный номер';
-                      }
-                      isError = false;
-                    },
+                    // validator: (value) {
+                    //   phone = value!;
+                    //   return null;
+                    // },
+                    validator: validatePhoneNumber,
                     onChanged: (value) {
-                      isButtonPressed = false;
-                      if (isError) {
-                        phoneFormKey.currentState?.validate();
-                      }
+                      phone = value;
                     },
+                    // onChanged: (value) {
+                    //   isButtonPressed = false;
+                    //   if (isError) {
+                    //     phoneFormKey.currentState?.validate();
+                    // }
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      // maskFormatter,
-                      mobileFormatter,
-                      // _newMobileFormatter,
+                      LengthLimitingTextInputFormatter(11),
+                      // mobileFormatter,
                     ],
-                    maxLength: 17,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     decoration: const InputDecoration(
@@ -377,6 +383,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   TextFormField(
                     autovalidateMode: AutovalidateMode.always,
                     key: emailFormKey,
+                    controller: emailController,
                     validator: validateEmail,
                     onChanged: (value) {
                       email = value;
@@ -433,32 +440,35 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                       Column(
                         children: [
                           customTouristsTextFormField(
+                            _nameController,
                             listOfNameKeys,
                             index,
                             validateNameAndSurname,
                             'Имя',
-                                (value) => setState(() => _name = value!),
+                            (value) => setState(() => _name = _nameController.text),
                             [FilteringTextInputFormatter.singleLineFormatter],
                             TextInputType.name,
                           ),
                           const SizedBox(height: 10.0),
                           customTouristsTextFormField(
+                            _surnameController,
                             listOfSurnameKeys,
                             index,
                             validateNameAndSurname,
                             'Фамилия',
-                                (value) => setState(() => _surname = value!),
+                            (value) => setState(() => _surname = _surnameController.text),
                             [FilteringTextInputFormatter.singleLineFormatter],
                             TextInputType.name,
                           ),
                           const SizedBox(height: 10.0),
                           // Дата рождения
                           customTouristsTextFormField(
+                            _birthdayController,
                             listOfBirthdayKeys,
                             index,
                             birthdayValidator,
                             'Дата рождения',
-                                (value) => setState(() => _birthday = value!),
+                            (value) => setState(() => _birthday = _birthdayController.text),
                             [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.singleLineFormatter, BirthTextInputFormatter()],
                             TextInputType.number,
                           ),
@@ -466,40 +476,36 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                           //         (value) => setState(() => _birthday = value!), TextInputType.number),
                           const SizedBox(height: 10.0),
                           customTouristsTextFormField(
+                            _citizenshipController,
                             listOfCitizenshipKeys,
                             index,
                             validateCitizenship,
                             'Гражданство',
-                                (value) => setState(() => _citizenship = value!),
+                            (value) => setState(() => _citizenship = _citizenshipController.text),
                             [LengthLimitingTextInputFormatter(2), FilteringTextInputFormatter.singleLineFormatter, UpperCaseTextFormatter()],
                             TextInputType.text,
                           ),
                           const SizedBox(height: 10.0),
                           // Passport number
                           customTouristsTextFormField(
+                            _passwordNumberController,
                             listOfPassportNumberKeys,
                             index,
                             validatePassportNumber,
                             'Номер загранпаспорта',
-                                // if enabled, it gives an error Invalid radix-10 number (at character 1)
-                                // (value) =>
-                                // setState(() {
-                                //   _passportNumber = value!;
-                                // }),
-                            (value) {},
-                            [LengthLimitingTextInputFormatter(11), FilteringTextInputFormatter.singleLineFormatter, passportFormatter],
+                            // if enabled, it gives an error Invalid radix-10 number (at character 1)
+                            (value) => setState(() => _passportNumber = _passwordNumberController.text),
+                            [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.singleLineFormatter],
                             TextInputType.number,
                           ),
                           const SizedBox(height: 10.0),
                           customTouristsTextFormField(
+                            _validityPassportPeriodController,
                             listOfPassportValidityPeriodKeys,
                             index,
                             birthdayValidator,
                             'Срок действия загранспаспорта',
-                                (value) =>
-                                setState(() {
-                                  _validityPassportPeriod = value!;
-                                }),
+                            (value) => setState(() => _validityPassportPeriod = _validityPassportPeriodController.text),
                             [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.singleLineFormatter, BirthTextInputFormatter()],
                             TextInputType.number,
                           ),
@@ -573,34 +579,24 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         // } else {
         //   Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
         // }
-        onPressed: _name.isNotEmpty && _surname.isNotEmpty && _birthday.isNotEmpty ? _submit : null,
+        onPressed: _name.isNotEmpty &&
+                _surname.isNotEmpty &&
+                _birthday.isNotEmpty &&
+                _citizenship.isNotEmpty &&
+                _passportNumber.isNotEmpty &&
+                _validityPassportPeriod.isNotEmpty
+            ? _submit
+            : null,
         // },
       ),
     );
   }
 
-  TextFormField customTouristBirthdayAndPassportValidatePeriodTextFormField(List<dynamic> listKey, int index, FormFieldValidator<String?> validator,
-      String title, ValueChanged<String?> onChanged, TextInputType textInputType) {
-    return TextFormField(
-      key: listKey[index],
-      validator: validator,
-      onChanged: onChanged,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(10),
-        FilteringTextInputFormatter.singleLineFormatter,
-        BirthTextInputFormatter(),
-      ],
-      keyboardType: textInputType,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-      decoration: textFormFieldDecorationWidget(title),
-    );
-  }
-
-  TextFormField customTouristsTextFormField(List<dynamic> listKey, int index, FormFieldValidator<String?> validator, String title,
-      ValueChanged<String?> onChanged, List<TextInputFormatter>? inputFormatters, TextInputType textInputType) {
+  TextFormField customTouristsTextFormField(TextEditingController controller, List<dynamic> listKey, int index, FormFieldValidator<String?> validator,
+      String title, ValueChanged<String?> onChanged, List<TextInputFormatter>? inputFormatters, TextInputType textInputType) {
     return TextFormField(
       autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-      // controller: nameController,
+      controller: controller,
       key: listKey[index],
       validator: validator,
       onChanged: onChanged,
