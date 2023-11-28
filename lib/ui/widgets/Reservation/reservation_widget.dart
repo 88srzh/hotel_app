@@ -10,6 +10,7 @@ import 'package:hotel_app/ui/components/custom_app_bar_widget.dart';
 import 'package:hotel_app/ui/components/custom_bottom_navigation_bar.dart';
 import 'package:hotel_app/ui/components/five_star_row.dart';
 import 'package:hotel_app/ui/components/headline_text_widget.dart';
+import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
@@ -168,9 +169,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   void _submit() {
     setState(() => _submitted = true);
-    if (Keys.nameKey1.currentState != null && Keys.surnameKey1.currentState != null) {
-      widget.onSubmit([_name, _surname]);
-    }
+    // if (Keys.nameKey1.currentState != null && Keys.surnameKey1.currentState != null) {
+    //   widget.onSubmit([_name, _surname]);
+    // }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
     // if (Keys.nameKey.currentState!.validate()) {
     //   widget.onSubmit(_name);
     // }
