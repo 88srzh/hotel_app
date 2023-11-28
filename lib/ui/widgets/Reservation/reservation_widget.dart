@@ -13,13 +13,11 @@ import 'package:hotel_app/ui/components/headline_text_widget.dart';
 import 'package:hotel_app/ui/widgets/OrderPaid/order_paid_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/birthday_text_input_formatter.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/keys.dart';
-import 'package:hotel_app/ui/widgets/Reservation/components/phone_number_text_input_formatter.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_black_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_grey_data_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/reservation_tour_prices_text_widget.dart';
 import 'package:hotel_app/ui/widgets/Reservation/components/upper_case_text_formatter.dart';
 import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ReservationWidget extends StatefulWidget {
   const ReservationWidget({super.key, required this.onSubmit});
@@ -172,7 +170,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     // if (Keys.nameKey1.currentState != null && Keys.surnameKey1.currentState != null) {
     //   widget.onSubmit([_name, _surname]);
     // }
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+    if (Keys.passportNumber1.currentState!.validate()) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
+    }
     // if (Keys.nameKey.currentState!.validate()) {
     //   widget.onSubmit(_name);
     // }
@@ -240,6 +240,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     String? validatePassportNumber(String? value) {
       if (value!.length < 10) {
         return 'Должно быть 10 цифр';
+      } else if (value.contains(RegExp('[a-zA-Z]'))) {
+        return 'Поле не может содержать буквы';
       }
       return null;
     }
@@ -498,7 +500,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                             // if enabled, it gives an error Invalid radix-10 number (at character 1)
                             (value) => setState(() => _passportNumber = _passwordNumberController.text),
                             [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.singleLineFormatter],
-                            TextInputType.number,
+                            TextInputType.name,
                           ),
                           const SizedBox(height: 10.0),
                           customTouristsTextFormField(
