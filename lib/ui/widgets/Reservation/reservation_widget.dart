@@ -170,9 +170,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     // if (Keys.nameKey1.currentState != null && Keys.surnameKey1.currentState != null) {
     //   widget.onSubmit([_name, _surname]);
     // }
-    if (Keys.passportNumber1.currentState!.validate()) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
-    }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderPaidWidget()));
     // if (Keys.nameKey.currentState!.validate()) {
     //   widget.onSubmit(_name);
     // }

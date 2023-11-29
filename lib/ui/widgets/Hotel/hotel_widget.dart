@@ -195,7 +195,7 @@ class _HotelWidgetState extends State<HotelWidget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10.0),
+              // const SizedBox(height: 10.0),
               // about the hotel
               AboutHotelWidget(peculiarities: peculiarities, hotel: hotel),
               const SizedBox(height: 10.0),
