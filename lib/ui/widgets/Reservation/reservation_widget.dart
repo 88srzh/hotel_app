@@ -64,8 +64,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
 
   bool customTileExpanded = false;
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
   final _birthdayController = TextEditingController();
@@ -73,8 +73,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   final _passwordNumberController = TextEditingController();
   final _validityPassportPeriodController = TextEditingController();
 
-  final List<Widget> expansionTileWidget = <Widget>[];
-  final List<void> expansionTile = <void>[];
+  // final List<Widget> expansionTileWidget = <Widget>[];
+  // final List<void> expansionTile = <void>[];
   final List<String> names = <String>['Первый турист'];
 
   List<dynamic> listOfTourists = <dynamic>[
@@ -163,7 +163,8 @@ class _ReservationWidgetState extends State<ReservationWidget> {
   String _citizenship = '';
   String _passportNumber = '';
   String _validityPassportPeriod = '';
-  String phone = '';
+  String _phone = '';
+  String _email = '';
 
   void _submit() {
     setState(() => _submitted = true);
@@ -181,8 +182,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     // bool isError = false;
     // bool isButtonPressed = false;
     // final mobileFormatter = PhoneNumberTextInputFormatter();
-    final emailFormKey = GlobalKey<FormState>();
-    final phoneFormKey = GlobalKey<FormState>();
 
     // TODO need to fix to normal formula with formatter may be?
     final String tourPrice = '${reservation.tourPrice.toStringAsFixed(4).substring(0, 3)} ${reservation.tourPrice.toStringAsFixed(4).substring(3, 6)}';
@@ -191,8 +190,6 @@ class _ReservationWidgetState extends State<ReservationWidget> {
         '${reservation.serviceCharge.toStringAsFixed(4).substring(0, 1)} ${reservation.serviceCharge.toStringAsFixed(4).substring(1, 4)}';
     final payable = (reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge);
     final String payableWithFormatter = '${payable.toStringAsFixed(4).substring(0, 3)} ${payable.toStringAsFixed(4).substring(3, 6)}';
-
-    String email;
 
     // var passportFormatter = MaskTextInputFormatter(
     //   mask: '####-######',
@@ -351,21 +348,12 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   const SizedBox(height: 10.0),
                   TextFormField(
                     autovalidateMode: AutovalidateMode.always,
-                    controller: phoneController,
-                    key: phoneFormKey,
-                    // validator: (value) {
-                    //   phone = value!;
-                    //   return null;
-                    // },
+                    controller: _phoneController,
+                    key: Keys.phoneFormKey,
                     validator: validatePhoneNumber,
                     onChanged: (value) {
-                      phone = value;
+                      _phone = value;
                     },
-                    // onChanged: (value) {
-                    //   isButtonPressed = false;
-                    //   if (isError) {
-                    //     phoneFormKey.currentState?.validate();
-                    // }
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(11),
@@ -384,11 +372,11 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                   const SizedBox(height: 10.0),
                   TextFormField(
                     autovalidateMode: AutovalidateMode.always,
-                    key: emailFormKey,
-                    controller: emailController,
+                    key: Keys.emailFormKey,
+                    controller: _emailController,
                     validator: validateEmail,
                     onChanged: (value) {
-                      email = value;
+                      _email = value;
                     },
                     keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -586,7 +574,9 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 _birthday.isNotEmpty &&
                 _citizenship.isNotEmpty &&
                 _passportNumber.isNotEmpty &&
-                _validityPassportPeriod.isNotEmpty
+                _validityPassportPeriod.isNotEmpty &&
+                _phone.isNotEmpty &&
+                _email.isNotEmpty
             ? _submit
             : null,
         // },
