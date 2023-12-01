@@ -177,6 +177,10 @@ class _ReservationWidgetState extends State<ReservationWidget> {
     // }
   }
 
+  void _notSubmit() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Не все поля заполнены')));
+  }
+
   @override
   Widget build(BuildContext context) {
     // bool isError = false;
@@ -578,7 +582,7 @@ class _ReservationWidgetState extends State<ReservationWidget> {
                 _phone.isNotEmpty &&
                 _email.isNotEmpty
             ? _submit
-            : null,
+            : _notSubmit,
         // },
       ),
     );
