@@ -43,4 +43,6 @@ class Keys {
   static final passportValidityPeriod5 = GlobalKey<FormState>();
   static final passportValidityPeriod6 = GlobalKey<FormState>();
   static final passportValidityPeriod7 = GlobalKey<FormState>();
+  static final emailFormKey = GlobalKey<FormState>();
+  static final phoneFormKey = GlobalKey<FormState>();
 }
